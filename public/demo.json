@@ -1,0 +1,707 @@
+[
+  {
+    "language": "en",
+    "translations": {
+      "title": "Case Galaxy",
+      "logout": "Logout",
+      "cart_modal": {
+        "title": "Your Cart",
+        "btn_title": "Proceed to Buy",
+        "cart_empty": "Your cart is empty",
+        "remove": "Remove",
+        "total": "Total"
+      },
+      "sm_menu": "Menu",
+      "hero_carousel": [
+        {
+          "type": "video",
+          "src": "/assets/banner.mp4",
+          "heading": "Elevate Your Device",
+          "subheading": "Futuristic Protection for Modern Smartphones"
+        },
+        {
+          "type": "image",
+          "src": "/assets/Mobile_banner1.jpg",
+          "heading": "Stylish Designs",
+          "subheading": "Protect Your Device in Style"
+        },
+        {
+          "type": "image",
+          "src": "/assets/Mobile_banner2.jpg",
+          "heading": "Durable Materials",
+          "subheading": "Long-lasting Protection for Every Occasion"
+        },
+        {
+          "type": "image",
+          "src": "/assets/Mobile_banner3.jpeg",
+          "heading": "Lightweight Covers",
+          "subheading": "Comfort and Convenience for Daily Use"
+        }
+      ],
+      "carousel_btn": "Explore Covers",
+      "add_to_cart": "ADD TO CART",
+      "added_to_cart": "added to cart!",
+      "save_title": "Save",
+      "reviews": "reviews",
+      "in_stock": "In Stock",
+      "out_of_stock": "Out of Stock",
+      "usp_items": [
+        {
+          "title": "Eco-Friendly",
+          "description": "Crafted from sustainable materials."
+        },
+        {
+          "title": "Free Shipping",
+          "description": "Free shipping available for all orders."
+        },
+        {
+          "title": "Customizable",
+          "description": "Add your own touch with custom designs."
+        }
+      ],
+      "products_title": "Products",
+      "testomonial_title": "Customer Testimonials",
+      "testomonial_data": [
+        {
+          "id": 1,
+          "name": "Raju",
+          "rating": 3,
+          "comment": "Very durable and looks super sleek. Totally worth it.",
+          "avatar": "https://media.gettyimages.com/id/175990379/video/portrait-of-a-horrible-boss.jpg?s=640x640&k=20&c=rrcEN7JwxCS3NEPBD6eHN-R_I7zUv98CL-lpMCzaDGA="
+        },
+        {
+          "id": 2,
+          "name": "Ram",
+          "rating": 4,
+          "comment": "Stylish and strong, it makes my phone look amazing!",
+          "avatar": "https://media.istockphoto.com/id/849455442/photo/smiling-businessman-in-his-office.jpg?s=612x612&w=0&k=20&c=PcM0ei31yAmQLV_LjzQODC424QDcMeEDff9r-gmJyu0="
+        },
+        {
+          "id": 3,
+          "name": "Krishna",
+          "rating": 4,
+          "comment": "Perfect fit and looks amazing! The case feels premium.",
+          "avatar": "https://img.freepik.com/premium-photo/smiling-businessman-formal-wear-using-tablet-while-standing-rooftop_232070-1360.jpg"
+        }
+      ],
+      "lead_capture": {
+        "title": "Get 15% Exclusive Offers",
+        "alert": "Congratulations! You got a 15% flat discount.",
+        "btn_title": "Submit",
+        "name_label": "Full Name",
+        "number_label": "Phone Number",
+        "name_err_msg": {
+          "required": "Name is required",
+          "pattern": "Name must start with a capital letter, contain only letters (no numbers or special characters), and allow only a single space between words."
+        },
+        "number_err_msg": {
+          "required": "Phone number is required",
+          "pattern": "Phone number must start with a digit between 6 and 9, contain exactly 10 digits, and not have 6 consecutive identical digits."
+        }
+        },
+      "benefits_data": {
+        "title": "Exceptional Features",
+        "benefits": [
+          "Advanced heat dissipation for improved performance.",
+          "Scratch-resistant surface with anti-glare properties.",
+          "Eco-friendly materials used for sustainable design.",
+          "Enhanced grip for better handling and usability.",
+          "Optimized for wireless charging with no interference."
+        ]
+      },
+      "our_impact": {
+        "title": "Our Impact",
+        "status_data": [
+          {
+            "value": "90%",
+            "label": "Customer Satisfaction"
+          },
+          {
+            "value": "200+",
+            "label": "Unique Designs"
+          },
+          {
+            "value": "10M+",
+            "label": "Covers Sold"
+          }
+        ]
+      },
+      "footer": {
+        "col_one": {
+          "title": "Case Galaxy",
+          "description": "Elevating device protection since 2025."
+        },
+        "col_two": {
+          "title": "Contact Us",
+          "description": "Phone"
+        },
+        "col_three": {
+          "title": "Follow Us",
+          "fb_url": "https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2F",
+          "insta_url": "https://www.instagram.com/?hl=en",
+          "twitter_url": "https://x.com/?lang=en&mx=2"
+        },
+        "copy_right": "All rights reserved."
+      },
+      "details_title": "Details",
+      "payment_title": "Payment",
+      "confirm_title": "Confirm",
+      "personal_details": {
+        "title": "Personal Details",
+        "full_name": "Full Name",
+        "name_err_msg": {
+          "field": "name",
+          "required_err": "is required",
+          "err_msg": "Name should contain only letters and spaces (2-50 characters)"
+        },
+        "email": "Email",
+        "email_err_msg": {
+          "field": "email",
+          "required_err": "is required",
+          "err_msg": "Please enter a valid email address"
+        },
+        "phone": "Phone",
+        "phone_err_msg": {
+          "field": "phone",
+          "required_err": "is required",
+          "err_msg": "Phone number must be 10 digits and start with 6, 7, 8, or 9"
+        },
+        "address": "Address",
+        "address_err_msg": {
+          "field": "address",
+          "required_err": "is required",
+          "err_msg": "Address is required (minimum 10 characters)"
+        },
+        "city_name": "City",
+        "city_err_msg": {
+          "field": "city",
+          "required_err": "is required",
+          "err_msg": "Enter a valid city"
+        },
+        "state_name": "State",
+        "state_err_msg": {
+          "field": "state",
+          "required_err": "is required",
+          "err_msg": "Enter a valid state"
+        },
+        "zip": "Zip Code",
+        "zipCode_err_msg": {
+          "field": "zipCode",
+          "required_err": "is required",
+          "err_msg": "ZIP code must be 6 digits"
+        },
+        "card_number": "Card Number",
+        "cardNumber_err_msg": {
+          "field": "cardNumber",
+          "required_err": "is required",
+          "err_msg": "Card number must be 16 digits"
+        },
+        "expiry": "Expiry Date",
+        "cardExpiry_err_msg": {
+          "field": "cardExpiry",
+          "required_err": "expiry is required",
+          "err_msg": "Invalid expiry date (MM/YY)"
+        },
+        "cvv": "CVV",
+        "cardCvc_err_msg": {
+          "field": "cardCvc",
+          "required_err": "cvv is required",
+          "err_msg": "CVV must be 3 digits"
+        }
+      },
+      "payment_method": "Payment Method",
+      "select_card_type": "Select Card Type",
+      "card_details": "Card Details",
+      "confirm_order": "Confirm Order",
+      "thank_you_purchase": "Thank you for your purchase",
+      "order_summary": "Order Summary",
+      "order_product": "Product",
+      "order_quantity": "Quantity",
+      "order_price": "Price",
+      "btn_cancel": "Cancel",
+      "btn_next": "Next",
+      "btn_back": "Back",
+      "btn_place_order": "Place Order",
+      "btn_close": "Close",
+      "cash_on_delivery": "Cash On Delivery",
+      "Pay_when_you_receive": "Pay when you receive",
+      "Credit_Debit_Card": "Credit/Debit Card",
+      "Secure_online_payment": "Secure online Payment",
+      "Delivery_Address": "Delivery Address",
+      "order_confirmed": "Order Confirmed",
+      "cards_data": [
+        "Visa",
+        "MasterCard",
+        "American Express",
+        "Discover"
+      ],
+      "login": {
+        "title": "Log In",
+        "login_load": "Logging in...",
+        "forgot_psw": "Forgot password?",
+        "dont_have_account": "Don't have an account? Sign Up",
+        "email_label": "Email Address",
+        "email_err_msg": {
+          "required": "Email is required",
+          "err_msg": "Please enter a valid email address"
+        },
+        "psw_label": "Password",
+        "psw_err_msg": {
+          "required": "Password is required",
+          "err_msg": "Password must be at least 8 characters"
+        }
+      },
+      "forgot_psw": {
+        "title": "Change Password",
+        "email_label": "Enter Registered Email",
+        "otp_label": "Enter OTP",
+        "psw_label": "New Password",
+        "send_otp": "Send OTP",
+        "verify_otp": "Verify OTP",
+        "go_to_home": "Go to Home",
+        "already_sent_otp": "Already sent OTP (valid up to 5 min)",
+        "otp_sent": "OTP sent successfully!",
+        "otp_verifyed": "OTP verified successfully!",
+        "invalid_opt": "Invalid OTP",
+        "err_changing_psw": "Error changing password",
+        "psw_change": "Password changed successfully!"
+      },
+      "sign_up": {
+        "title": "Create Account",
+        "account_created": "Account created successfully! Redirecting...",
+        "already_have_account": "Already have an account?",
+        "login_here": "Log in here",
+        "full_name_label": "Full Name",
+        "email_address_label": "Email Address",
+        "psw_label": "Password",
+        "confirm_psw_label": "Confirm Password",
+        "err_msg_name_req": "Name is required",
+        "err_msg_two_char": "Name must be at least 2 characters",
+        "err_contain_letters": "Name can only contain letters and spaces",
+        "err_valid_email": "Please enter a valid email address",
+        "err_email_required": "Email is required",
+        "err_valid_domain": "Please use a valid email domain",
+        "err_psw_required": "Password is required",
+        "err_psw_char": "Password must be at least 8 characters",
+        "err_psw_contain": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+        "err_psw_match": "Passwords must match",
+        "confirm_psw": "Confirm Password is required"
+      },
+      "admin":{
+        "title":"Admin Panel",
+        "logout":"Logout",
+        "profile":"Profile",
+        "orders":"Orders",
+        "management":"Management",
+        "products":"Products",
+        "profile_tab":{
+        "user_name":"Admin",
+        "user_email":"admin@example.com",
+        "role":"Role: Admin"
+        },
+        "order_tab":{
+          "order_history":"Order History",
+          "order_id":"Order ID",
+          "customer":"Customer",
+          "total":"Total",
+          "status":"Status",
+          "date":"Date"
+        },
+        "order_management_tab":{
+          "order_management":"Order Management",
+          "order_id":"Order ID",
+          "customer":"Customer",
+          "total":"Total",
+          "status":"Status",
+         "options": ["Pending", "Processing", "Shipped", "Delivered", "Cancelled", "Confirmed"],
+          "toast_msg":{
+            "order_update":"Order Updated",
+            "order_success":"Order status updated successfully",
+            "err_update":"Error updating order status:",
+            "err_failed_update":"Failed to update order status"
+          }
+        },
+        "products_tab":{
+          "title":"Product Management",
+          "basic_info":"Basic Information",
+          "product_name_label":"Product Name",
+          "product_brand_label":"Brand & Model",
+          "product_price_label":"Price",
+          "product_discount_label":"Discount Price",
+          "category_title":"Category",
+          "category_opt_mobile":"Mobile",
+          "category_opt_tab":"Tablet",
+          "laptop_stock_out":"Laptop (Out of Stock)",
+          "smart_watch":" Smartwatch (Coming Soon)",
+          "img_url_label":"Image URL",
+          "desc_label":"Description",
+          "in_stock_label":"In Stock",
+          "reset_btn":"Reset",
+          "loading_btn":{"adding":"Adding...","add_product":"Add Product"},
+          "regular_price_min_error": "Regular price must be at least ₹2",
+          "regular_price_max_error": "Regular price cannot exceed ₹10,000",
+          "discount_price_comparison_error": "Discount price must be less than regular price",
+          "discount_price_min_error": "Discount price must be at least ₹1",
+          "discount_price_max_error": "Discount price cannot exceed ₹10,000",
+          "price_fix_message": "Please fix price errors before submitting",
+          "product_add_failed": "Failed to add product",
+          "product_add_success": "Product added successfully!"
+        }
+      }
+    }
+  },
+  {
+    "language": "zh", 
+    "translations": {
+      "title": "案例银河",
+      "logout": "登出",
+      "cart_modal": {
+        "title": "您的购物车",
+        "btn_title": "继续购买",
+        "cart_empty": "您的购物车为空",
+        "remove": "移除",
+        "total": "总计"
+      },
+      "sm_menu": "菜单",
+      "hero_carousel": [
+        {
+          "type": "video",
+          "src": "/assets/banner.mp4",
+          "heading": "提升您的设备",
+          "subheading": "为现代智能手机提供未来保护"
+        },
+        {
+          "type": "image",
+          "src": "/assets/Mobile_banner1.jpg",
+          "heading": "时尚设计",
+          "subheading": "让您的设备时尚又安全"
+        },
+        {
+          "type": "image",
+          "src": "/assets/Mobile_banner2.jpg",
+          "heading": "耐用材料",
+          "subheading": "为每一个场合提供持久保护"
+        },
+        {
+          "type": "image",
+          "src": "/assets/Mobile_banner3.jpeg",
+          "heading": "轻量化保护壳",
+          "subheading": "日常使用的舒适与便利"
+        }
+      ],
+      "carousel_btn": "探索保护壳",
+      "add_to_cart": "加入购物车",
+      "added_to_cart": "已加入购物车！",
+      "save_title": "保存",
+      "reviews": "评价",
+      "in_stock": "有货 ",
+      "out_of_stock": "缺货",
+      "usp_items": [
+        {
+          "title": "环保材料",
+          "description": "采用可持续材料制成。"
+        },
+        {
+          "title": "免费配送",
+          "description": "所有订单均可享受免费配送。"
+        },
+        {
+          "title": "可定制",
+          "description": "使用定制设计增添个人风格。"
+        }
+      ],
+      "products_title": "产品",
+      "testomonial_title": "客户评价",
+      "testomonial_data": [
+        {
+          "id": 1,
+          "name": "王伟",
+          "rating": 3,
+          "comment": "非常耐用，看起来很时尚，完全值得购买。",
+          "avatar": "https://media.gettyimages.com/id/175990379/video/portrait-of-a-horrible-boss.jpg?s=640x640&k=20&c=rrcEN7JwxCS3NEPBD6eHN-R_I7zUv98CL-lpMCzaDGA="
+        },
+        {
+          "id": 2,
+          "name": "李娜",
+          "rating": 4,
+          "comment": "时尚又结实，让我的手机焕然一新！",
+          "avatar": "https://media.istockphoto.com/id/849455442/photo/smiling-businessman-in-his-office.jpg?s=612x612&w=0&k=20&c=PcM0ei31yAmQLV_LjzQODC424QDcMeEDff9r-gmJyu0="
+        },
+        {
+          "id": 3,
+          "name": "张强",
+          "rating": 4,
+          "comment": "完美贴合，看起来很棒！手感非常高级。",
+          "avatar": "https://img.freepik.com/premium-photo/smiling-businessman-formal-wear-using-tablet-while-standing-rooftop_232070-1360.jpg"
+        }
+      ],
+      "lead_capture": {
+        "title": "获取15%专属优惠",
+        "alert": "恭喜！您获得15%折扣。",
+        "btn_title": "提交",
+        "name_label": "全名",
+        "number_label": "电话号码",
+        "name_err_msg": {
+          "required": "姓名是必填的",
+          "pattern": "姓名必须以大写字母开头，只包含字母（无数字或特殊字符），单词之间仅允许一个空格。"
+        },
+        "number_err_msg": {
+          "required": "电话号码是必填的",
+          "pattern": "电话号码必须以 6 到 9 之间的数字开头，必须包含 10 位数字，并且不能有 6 个连续相同的数字。"
+        }
+        },
+      "benefits_data": {
+        "title": "卓越功能",
+        "benefits": [
+          "先进的散热设计，提高设备性能。",
+          "防刮表面，具有防眩光特性。",
+          "采用环保材料，实现可持续设计。",
+          "增强握持感，提高操作体验。",
+          "优化无线充电，无干扰。"
+        ]
+      },
+      "our_impact": {
+        "title": "我们的影响",
+        "status_data": [
+          {
+            "value": "90%",
+            "label": "客户满意度"
+          },
+          {
+            "value": "200+",
+            "label": "独特设计"
+          },
+          {
+            "value": "10M+",
+            "label": "已售保护壳"
+          }
+        ]
+      },
+      "footer": {
+        "col_one": {
+          "title": "案例银河",
+          "description": "自2025年以来提升设备保护。"
+        },
+        "col_two": {
+          "title": "联系我们",
+          "description": "电话"
+        },
+        "col_three": {
+          "title": "关注我们",
+          "fb_url": "https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2F",
+          "insta_url": "https://www.instagram.com/?hl=en",
+          "twitter_url": "https://x.com/?lang=en&mx=2"
+        },
+        "copy_right": "版权所有。"
+      },
+      "details_title": "详情",
+      "payment_title": "付款",
+      "confirm_title": "确认",
+      "personal_details": {
+        "title": "个人信息",
+        "full_name": "全名",
+        "name_err_msg": {
+          "field": "姓名",
+          "required_err": "是必填项",
+          "err_msg": "姓名只能包含字母和空格（2-50个字符）"
+        },
+        "email": "电子邮件",
+        "email_err_msg": {
+          "field": "电子邮件",
+          "required_err": "是必填项",
+          "err_msg": "请输入有效的电子邮件地址"
+        },
+        "phone": "电话",
+        "phone_err_msg": {
+          "field": "电话",
+          "required_err": "是必填项",
+          "err_msg": "电话号码必须是10位数字，并以6、7、8或9开头"
+        },
+        "address": "地址",
+        "address_err_msg": {
+          "field": "地址",
+          "required_err": "是必填项",
+          "err_msg": "地址是必填项（至少10个字符）"
+        },
+        "city_name": "城市",
+        "city_err_msg": {
+          "field": "城市",
+          "required_err": "是必填项",
+          "err_msg": "请输入有效的城市名称"
+        },
+        "state_name": "省份",
+        "state_err_msg": {
+          "field": "省份",
+          "required_err": "是必填项",
+          "err_msg": "请输入有效的省份名称"
+        },
+        "zip": "邮政编码",
+        "zipCode_err_msg": {
+          "field": "邮政编码",
+          "required_err": "是必填项",
+          "err_msg": "邮政编码必须是6位数字"
+        },
+        "card_number": "银行卡号",
+        "cardNumber_err_msg": {
+          "field": "银行卡",
+          "required_err": "是必填项",
+          "err_msg": "银行卡号必须是16位数字"
+        },
+        "expiry": "有效期",
+        "cardExpiry_err_msg": {
+          "field": "有效期",
+          "required_err": "有效期是必填项",
+          "err_msg": "无效的有效期（MM/YY）"
+        },
+        "cvv": "西维维",
+        "cardCvc_err_msg": {
+          "field": "西维维",
+          "required_err": "CVV是必填项",
+          "err_msg": "CVV必须是3位数字"
+        }
+      },
+      "payment_method": "支付方式",
+      "select_card_type": "选择卡类型",
+      "card_details": "银行卡信息",
+      "confirm_order": "确认订单",
+      "thank_you_purchase": "感谢您的购买",
+      "order_summary": "订单摘要",
+      "order_product": "产品",
+      "order_quantity": "数量",
+      "order_price": "价格",
+      "btn_cancel": "取消",
+      "btn_next": "下一步",
+      "btn_back": "返回",
+      "btn_place_order": "下订单",
+      "btn_close": "关闭",
+      "cash_on_delivery": "货到付款",
+      "Pay_when_you_receive": "收到货时付款",
+      "Credit_Debit_Card": "信用卡/借记卡",
+      "Secure_online_payment": "安全在线支付",
+      "Delivery_Address": "送货地址",
+      "order_confirmed": "订单已确认",
+      "cards_data": [
+        "维萨",
+        "万事达",
+        "美国运通",
+        "发现卡"
+      ],
+      "login": {
+        "title": "登录",
+        "login_load": "登录中",
+        "forgot_psw": "忘记密码？",
+        "dont_have_account": "没有账户？注册",
+        "email_label": "电子邮件地址",
+        "email_err_msg": {
+          "required": "电子邮件是必填项",
+          "err_msg": "请输入有效的电子邮件地址"
+        },
+        "psw_label": "密码",
+        "psw_err_msg": {
+          "required": "密码是必填项",
+          "err_msg": "密码必须至少8个字符"
+        }
+      },
+      "forgot_psw": {
+        "title": "更改密码",
+        "email_label": "输入注册邮箱",
+        "otp_label": "输入OTP",
+        "psw_label": "新密码",
+        "send_otp": "发送OTP",
+        "verify_otp": "验证OTP",
+        "go_to_home": "返回主页",
+        "already_sent_otp": "OTP已发送（有效期5分钟）",
+        "otp_sent": "OTP发送成功！",
+        "otp_verifyed": "OTP验证成功！",
+        "invalid_opt": "无效的OTP",
+        "err_changing_psw": "更改密码时出错",
+        "psw_change": "密码更改成功！"
+      },
+      "sign_up": {
+        "title": "创建账户",
+        "account_created": "账户创建成功！正在重定向...",
+        "already_have_account": "已经有账户？",
+        "login_here": "在这里登录",
+        "full_name_label": "全名",
+        "email_address_label": "电子邮件地址",
+        "psw_label": "密码",
+        "confirm_psw_label": "确认密码",
+        "err_msg_name_req": "姓名是必填项",
+        "err_msg_two_char": "姓名必须至少包含2个字符",
+        "err_contain_letters": "姓名只能包含字母和空格",
+        "err_valid_email": "请输入有效的电子邮件地址",
+        "err_email_required": "电子邮件是必填项",
+        "err_valid_domain": "请使用有效的电子邮件域名",
+        "err_psw_required": "密码是必填项",
+        "err_psw_char": "密码必须至少包含8个字符",
+        "err_psw_contain": "密码必须包含至少一个大写字母、一个小写字母、一个数字和一个特殊字符",
+        "err_psw_match": "两次输入的密码必须匹配",
+        "confirm_psw": "确认密码是必填项"
+      },
+      "admin": {
+        "title": "管理面板",
+        "logout": "登出",
+        "profile": "个人资料",
+        "orders": "订单",
+        "management": "管理",
+        "products": "产品",
+        "profile_tab": {
+          "user_name": "管理员",
+          "user_email": "admin@example.com",
+          "role": "角色：管理员"
+        },
+        "order_tab": {
+          "order_history": "订单历史",
+          "order_id": "订单编号",
+          "customer": "客户",
+          "total": "总金额",
+          "status": "状态",
+          "date": "日期"
+        },
+        "order_management_tab": {
+          "order_management": "订单管理",
+          "order_id": "订单编号",
+          "customer": "客户",
+          "total": "总金额",
+          "status": "状态",
+          "options": ["待处理", "处理中", "已发货", "已送达", "已取消", "已确认"],
+          "toast_msg": {
+            "order_update": "订单已更新",
+            "order_success": "订单状态更新成功",
+            "err_update": "更新订单状态出错：",
+            "err_failed_update": "订单状态更新失败"
+          }
+        },
+        "products_tab": {
+          "title": "产品管理",
+          "basic_info": "基本信息",
+          "product_name_label": "产品名称",
+          "product_brand_label": "品牌与型号",
+          "product_price_label": "价格",
+          "product_discount_label": "折扣价",
+          "category_title": "类别",
+          "category_opt_mobile": "手机",
+          "category_opt_tab": "平板",
+          "laptop_stock_out": "笔记本电脑（缺货）",
+          "smart_watch": "智能手表（即将推出）",
+          "img_url_label": "图片 URL",
+          "desc_label": "描述",
+          "in_stock_label": "库存",
+          "reset_btn": "重置",
+          "loading_btn": {
+            "adding": "添加中...",
+            "add_product": "添加产品"
+          },
+          "regular_price_min_error": "常规价格必须至少为 ₹2",
+          "regular_price_max_error": "常规价格不能超过 ₹10,000",
+          "discount_price_comparison_error": "折扣价格必须低于常规价格",
+          "discount_price_min_error": "折扣价格必须至少为 ₹1",
+          "discount_price_max_error": "折扣价格不能超过 ₹10,000",
+          "price_fix_message": "请在提交前修正价格错误",
+          "product_add_failed": "添加产品失败",
+          "product_add_success": "产品添加成功！"
+        }
+      }
+    }
+  }
+]
