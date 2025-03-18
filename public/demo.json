@@ -692,11 +692,11 @@
             "adding": "添加中...",
             "add_product": "添加产品"
           },
-          "regular_price_min_error": "常规价格必须至少为 ₹2",
-          "regular_price_max_error": "常规价格不能超过 ₹10,000",
+          "regular_price_min_error": "常规价格必须至少为 ¥2",
+          "regular_price_max_error": "常规价格不能超过 ¥10,000",
           "discount_price_comparison_error": "折扣价格必须低于常规价格",
-          "discount_price_min_error": "折扣价格必须至少为 ₹1",
-          "discount_price_max_error": "折扣价格不能超过 ₹10,000",
+          "discount_price_min_error": "折扣价格必须至少为 ¥1",
+          "discount_price_max_error": "折扣价格不能超过 ¥10,000",
           "price_fix_message": "请在提交前修正价格错误",
           "product_add_failed": "添加产品失败",
           "product_add_success": "产品添加成功！"
