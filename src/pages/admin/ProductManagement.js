@@ -287,7 +287,7 @@ const ProductManagement = () => {
                   error={!!priceError}
                   InputProps={{
                     startAdornment: (
-                      <InputAdornment position="start">₹</InputAdornment>
+                      <InputAdornment position="start">{language==="en"?"₹":"¥"}</InputAdornment>
                     ),
                   }}
                   size={isMobile ? "small" : "medium"}
@@ -309,7 +309,7 @@ const ProductManagement = () => {
                   error={!!priceError}
                   InputProps={{
                     startAdornment: (
-                      <InputAdornment position="start">₹</InputAdornment>
+                      <InputAdornment position="start">{language==="en"?"₹":"¥"}</InputAdornment>
                     ),
                   }}
                   size={isMobile ? "small" : "medium"}
@@ -541,7 +541,7 @@ const ProductManagement = () => {
                     error={!!priceError}
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment position="start">₹</InputAdornment>
+                        <InputAdornment position="start">{language==="en"?"₹":"¥"}</InputAdornment>
                       ),
                     }}
                     size={isMobile ? "small" : "medium"}
@@ -563,7 +563,7 @@ const ProductManagement = () => {
                     error={!!priceError}
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment position="start">₹</InputAdornment>
+                        <InputAdornment position="start">{language==="en"?"₹":"¥"}</InputAdornment>
                       ),
                     }}
                     size={isMobile ? "small" : "medium"}

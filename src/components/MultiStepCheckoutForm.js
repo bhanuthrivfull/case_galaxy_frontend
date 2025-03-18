@@ -114,7 +114,7 @@ const fadeInUp = {
 }
 
 export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
-  const { translations } = useLanguage();
+  const { translations, language } = useLanguage();
   console.log(JSON.stringify(translations.cards_data))
   const [step, setStep] = useState(1)
   const [direction, setDirection] = useState(0)
@@ -315,65 +315,65 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
         break;
       case "cardExpiry":
         formattedValue = value.replace(/\D/g, "");
-      
-       
+
+
         if (formattedValue.length >= 2) {
           let month = formattedValue.slice(0, 2);
           let year = formattedValue.slice(2, 4);
-      
-          
+
+
           if (parseInt(month) > 12) {
             month = "12";
           } else if (parseInt(month) < 1) {
             month = "01";
           }
-      
-          
+
+
           formattedValue = month + (year ? "/" + year : "");
-      
-          
+
+
           if (year.length === 2) {
             const currentYear = new Date().getFullYear() % 100;
             if (parseInt(year) < currentYear) {
-              return; 
+              return;
             }
           }
         }
-      
-       
+
+
         formattedValue = formattedValue.slice(0, 5);
         break;
-        
+
       case "phone":
-        let onlyNumbers = value.replace(/\D/g, ""); 
+        let onlyNumbers = value.replace(/\D/g, "");
         if (onlyNumbers.length > 0 && !/^[6789]/.test(onlyNumbers)) {
           return;
         }
-        formattedValue = onlyNumbers.slice(0, 10); 
+        formattedValue = onlyNumbers.slice(0, 10);
         break;
-      
+
       case "zipCode":
         formattedValue = value.replace(/\D/g, "").slice(0, 6)
         break
       case "name":
         formattedValue = value
-          .replace(/[^a-zA-Z\s]/g, "") 
-          .replace(/\b\w/g, (char) => char.toUpperCase()); 
+          .replace(/[^a-zA-Z\s]/g, "")
+          .replace(/\b\w/g, (char) => char.toUpperCase());
         break;
-        case "email":
-          formattedValue = value
+      case "email":
+        formattedValue = value
           .replace(/[,#'"!$%^&*()<>?/|}{[\]`~=+]/g, "")
           .replace(/\s/g, "")
-          .replace(/@{2,}/g, "@") 
-          .replace(/\.{2,}/g, ".") 
-        
-          break;
-       
-          
-        
-        
+          .replace(/@{2,}/g, "@")
+          .replace(/\.{2,}/g, ".")
+
+        break;
+
+
+
+
       default:
-        break   
+        break
     };
 
     setFormData((prev) => ({
@@ -485,7 +485,7 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
     <motion.div variants={fadeInUp}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
         <Typography variant="h5" gutterBottom style={{ color: "white" }}>
-         {translations?.select_card_type || "Loading..."}
+          {translations?.select_card_type || "Loading..."}
         </Typography>
         <FormControl component="fieldset" error={!!errors.cardType}>
           <RadioGroup name="cardType" value={formData.cardType} onChange={handleInputChange}>
@@ -1046,7 +1046,7 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                       }}
                     >
                       <Typography variant="h6" gutterBottom>
-                       {translations?.order_summary || "Loading..."}
+                        {translations?.order_summary || "Loading..."}
                       </Typography>
 
                       <TableContainer
@@ -1075,7 +1075,7 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                                   {item.quantity}
                                 </TableCell>
                                 <TableCell align="right">
-                                  ₹
+                                  {language === "en" ? "₹" : "¥"}
                                   {((item.productId.price - item.productId.discountPrice) * item.quantity).toFixed(2)}
                                 </TableCell>
                               </TableRow>
@@ -1097,7 +1097,7 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                           <strong>{translations?.cart_modal?.total || "Loading..."}</strong>
                         </Typography>
                         <Typography variant="subtitle1" color="primary">
-                          <strong>₹{totalPrice}</strong>
+                          <strong>{language==="en"?"₹":"¥"}{totalPrice}</strong>
                         </Typography>
                       </Box>
                     </Paper>
@@ -1169,7 +1169,7 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     {loading ? (
                       <CircularProgress size={24} color="inherit" />
                     ) : (
-                     <span>{translations?.btn_place_order}</span>
+                      <span>{translations?.btn_place_order}</span>
                     )}
                   </Button>
                 )}
