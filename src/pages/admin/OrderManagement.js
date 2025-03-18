@@ -19,7 +19,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useLanguage } from "../../contexts/LanguageContext";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://case-galaxy-backend-5it8.onrender.com/api";
 
 const OrderManagement = ({ orders, setOrders }) => {
   const {translations} = useLanguage();
