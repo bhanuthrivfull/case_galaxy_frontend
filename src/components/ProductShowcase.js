@@ -19,7 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useLanguage } from "../contexts/LanguageContext";
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+  process.env.REACT_APP_API_URL || "https://case-galaxy-backend-5it8.onrender.com/api";
 
 function ProductShowcase({ category }) {
   const { translations, language } = useLanguage();
