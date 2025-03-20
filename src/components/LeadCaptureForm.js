@@ -92,7 +92,7 @@ const LeadCaptureForm = () => {
       md: "2.5rem",
       lg: "3rem",
     },
-    fontWeight: 600,
+    fontWeight: 500,
     textAlign: "center",
     marginBottom: "2rem",
     color: "#6200ea", // Purple text color for the title
@@ -100,21 +100,11 @@ const LeadCaptureForm = () => {
 
   // Validation patterns
   const patterns = {
-    name: /^[A-Z][a-zA-Z]+(\s[a-zA-Z]+)*$/,
+    name:/^[A-Z][a-zA-Z]*(?: [A-Z][a-zA-Z]*)*$/,
     phone: /^(?!.*(\d)\1{8})[6-9]\d{9}$/,
   };
 
-  // Error messages
-  // const errorMessages = {
-  //   name: {
-  //     required: translations?.lead_capture?.errName?.required || "Name is required",
-  //     pattern: translations?.lead_capture?.errName?.pattern || "Name must start with a capital letter, contain only letters (no numbers or special characters), and allow only a single space between words."
-  //   },
-  //   phone: {
-  //     required: translations?.lead_capture?.errPhone?.required || "Phone number is required",
-  //     pattern: translations?.lead_capture?.errPhone?.pattern || "Phone number must start with a digit between 6 and 9, contain exactly 10 digits, and not have 9 consecutive identical digits."
-  //   },
-  // };
+ 
 
   const errorMessages = {
     name: {
@@ -234,15 +224,18 @@ const LeadCaptureForm = () => {
                     fullWidth
                   />
                   <TextField
-                    label={translations?.lead_capture?.number_label || "Phone Number"}
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur("phone")}
-                    error={touched.phone && !!errors.phone}
-                    helperText={touched.phone && errors.phone}
-                    fullWidth
-                  />
+  label={translations?.lead_capture?.number_label || "Phone Number"}
+  name="phone"
+  value={formData.phone}
+  onChange={handleChange}
+  onBlur={() => handleBlur("phone")}
+  error={touched.phone && !!errors.phone}
+  helperText={touched.phone && errors.phone}
+  fullWidth
+  InputProps={{
+    inputProps: { maxLength: 10 } // Only allow 10 digits
+  }}
+/>
                   {errors.submit && (
                     <Alert severity="error" sx={{ marginBottom: "1rem" }}>
                       {errors.submit}
