@@ -85,7 +85,7 @@
         }
       ],
       "lead_capture": {
-        "title": "Get 15% Exclusive Offers",
+        "title": "Get 15% Exclusive Offers on your first order",
         "alert": "Congratulations! You got a 15% flat discount.",
         "btn_title": "Submit",
         "name_label": "Full Name",
@@ -436,7 +436,7 @@
         }
       ],
       "lead_capture": {
-        "title": "获取15%专属优惠",
+        "title": "首次下单尊享 15% 独家优惠",
         "alert": "恭喜！您获得15%折扣。",
         "btn_title": "提交",
         "name_label": "全名",
