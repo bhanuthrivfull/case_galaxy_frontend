@@ -319,6 +319,11 @@ function ProductShowcase({ category }) {
                         "&:hover": {
                           bgcolor: "",
                         },
+                         "&.Mui-disabled": {
+                          color: "rgb(0, 0, 0) !important",  // Force color to black
+                          backgroundColor: "rgba(255, 255, 255, 0.46) !important",
+                          boxShadow: "none !important",
+                        },
                       }}
                     >
                       {loadingProducts[product._id] ? (
