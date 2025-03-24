@@ -100,7 +100,7 @@ const LeadCaptureForm = () => {
 
   // Validation patterns
   const patterns = {
-    name: /^[A-Z][a-zA-Z\s]{2,39}$/,
+    name: /^[A-Z][a-zA-Z](?:\s[a-zA-Z]+)$/,
     phone: /^(?!.*(\d)\1{6})[6-9]\d{9}$/,
   };
 
