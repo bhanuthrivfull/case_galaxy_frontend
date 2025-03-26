@@ -100,7 +100,7 @@ const LeadCaptureForm = () => {
 
   // Validation patterns
   const patterns = {
-    name: /^[A-Z][a-zA-Z](?:\s[a-zA-Z]+)$/,
+    name: /^[A-Z][a-z]*(?:\s[A-Z][a-z]*){0,49}$/,
     phone: /^(?!.*(\d)\1{6})[6-9]\d{9}$/,
   };
 
@@ -222,6 +222,9 @@ const LeadCaptureForm = () => {
                     error={touched.name && !!errors.name}
                     helperText={touched.name && errors.name}
                     fullWidth
+                    InputProps={{
+                      inputProps: { minLength: 3 }
+                    }}
                   />
                   <TextField
                     label={translations?.lead_capture?.number_label || "Phone Number"}

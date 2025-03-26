@@ -28,7 +28,7 @@ import {
 import React, { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
-const API_BASE_URL = "https://case-galaxy-backend-5it8.onrender.com/api";
+const API_BASE_URL = "http://localhost:5000/api";
 
 const ProductManagement = () => {
   const { translations } = useLanguage() // new code
@@ -309,7 +309,7 @@ const ProductManagement = () => {
                   error={!!priceError}
                   InputProps={{
                     startAdornment: (
-                      <InputAdornment position="start">{language==="en"?"₹":"¥"}</InputAdornment>
+                      <InputAdornment position="start">{language==="en"?"₹  ":"¥"}</InputAdornment>
                     ),
                   }}
                   size={isMobile ? "small" : "medium"}

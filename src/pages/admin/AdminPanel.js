@@ -40,7 +40,7 @@ function AdminPanel() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const API_BASE_URL = "https://case-galaxy-backend-5it8.onrender.com/api";
+  const API_BASE_URL = "http://localhost:5000/api";
 
   useEffect(() => {
     const fetchOrders = async () => {

@@ -27,7 +27,7 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import { useLanguage } from "../contexts/LanguageContext"
 
-const API_BASE_URL = "https://case-galaxy-backend-5it8.onrender.com/api"
+const API_BASE_URL = "http://localhost:5000/api"
 
 // Enhanced dark theme
 const darkTheme = createTheme({
@@ -114,7 +114,7 @@ const fadeInUp = {
 }
 
 export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
-  const { translations, language } = useLanguage();
+  const { translations,language } = useLanguage();
   console.log(JSON.stringify(translations.cards_data))
   const [step, setStep] = useState(1)
   const [direction, setDirection] = useState(0)

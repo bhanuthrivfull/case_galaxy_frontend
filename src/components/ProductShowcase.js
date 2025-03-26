@@ -19,7 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useLanguage } from "../contexts/LanguageContext";
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "https://case-galaxy-backend-5it8.onrender.com/api";
+  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 function ProductShowcase({ category }) {
   const { translations, language } = useLanguage();
@@ -319,7 +319,7 @@ function ProductShowcase({ category }) {
                         "&:hover": {
                           bgcolor: "",
                         },
-                         "&.Mui-disabled": {
+                        "&.Mui-disabled": {
                           color: "rgb(0, 0, 0) !important",  // Force color to black
                           backgroundColor: "rgba(255, 255, 255, 0.46) !important",
                           boxShadow: "none !important",
