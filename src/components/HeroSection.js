@@ -7,6 +7,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useLanguage } from "../contexts/LanguageContext";
+import { hero_carousel } from "../constants/data";
 
 function HeroSection() {
   const { translations } = useLanguage();
@@ -62,126 +63,124 @@ function HeroSection() {
         }}
       >
         <Slider ref={sliderRef} {...settings}>
-          {translations?.hero_carousel ? (
-            translations.hero_carousel.map((item,index)=>(
+          {
+            hero_carousel.map((item, index) => (
               <Box
-              key={index}
-              sx={{
-                position: "relative",
-                height: "100vh",
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden",
-              }}
-            >
-              {/* Background: Video or Image */}
-              {item.type === "video" ? (
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    zIndex: -1,
-                  }}
-                >
-                  <source src={item.src} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ) : (
-                <img
-                  src={item.src}
-                  alt={item.heading}
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    zIndex: -1,
-                  }}
-                />
-              )}
-
-              {/* Content Over Video or Image */}
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1 }}
-                style={{
-                  zIndex: 1,
-                  textAlign: "center",
-                  alignContent: "center",
-                  justifyContent: "center",
+                key={index}
+                sx={{
+                  position: "relative",
+                  height: "100vh",
+                  width: "100%",
+                  display: "flex",
                   alignItems: "center",
-                  color: "white",
-                  padding: "2rem",
-                  height: "100vh"
+                  justifyContent: "center",
+                  overflow: "hidden",
                 }}
               >
-                <Typography
-                  variant="h1"
-                  sx={{
-                    fontWeight: "bold",
-                    fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
-               
-                    textShadow: "2px 2px 10px rgba(69, 233, 244, 0.8)",
-                  }}
-                >
-                  {item.heading}
-                </Typography>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    marginTop: 2,
-                    textShadow: "1px 1px 5px rgba(0, 0, 0, 0.6)",
-                  }}
-                >
-                  {item.subheading}
-                </Typography>
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Link
-                    to="productshowcase"
-                    smooth={true}
-                    duration={500}
-                    offset={-70}
+                {/* Background: Video or Image */}
+                {item.type === "video" ? (
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      zIndex: -1,
+                    }}
                   >
-                    <Button
-                      variant="contained"
-                      size="large"
-                      color="info"
-                      sx={{
-                        mt: 4,
-                        py: 1.5,
-                        px: 3.5,
-                        fontSize: { xs: "1rem", sm: "1.2rem" },
-                        borderRadius: "8px",
-                        textTransform: "capitalize",
-                       backgroundImage: "rgb(226, 167, 38)"
-                      }}
+                    <source src={item.src} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <img
+                    src={item.src}
+                    alt={item.heading}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      zIndex: -1,
+                    }}
+                  />
+                )}
+
+                {/* Content Over Video or Image */}
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1 }}
+                  style={{
+                    zIndex: 1,
+                    textAlign: "center",
+                    alignContent: "center",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "white",
+                    padding: "2rem",
+                    height: "100vh"
+                  }}
+                >
+                  <Typography
+                    variant="h1"
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
+
+                      textShadow: "2px 2px 10px rgba(69, 233, 244, 0.8)",
+                    }}
+                  >
+                    {item.heading}
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      marginTop: 2,
+                      textShadow: "1px 1px 5px rgba(0, 0, 0, 0.6)",
+                    }}
+                  >
+                    {item.subheading}
+                  </Typography>
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Link
+                      to="productshowcase"
+                      smooth={true}
+                      duration={500}
+                      offset={-70}
                     >
-                     {translations?.carousel_btn}
-                    </Button>
-                  </Link>
+                      <Button
+                        variant="contained"
+                        size="large"
+                        color="info"
+                        sx={{
+                          mt: 4,
+                          py: 1.5,
+                          px: 3.5,
+                          fontSize: { xs: "1rem", sm: "1.2rem" },
+                          borderRadius: "8px",
+                          textTransform: "capitalize",
+                          backgroundImage: "rgb(226, 167, 38)"
+                        }}
+                      >
+                        Explore covers
+                      </Button>
+                    </Link>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            </Box>
+              </Box>
             ))
-          ):(
-            <p>Loading...</p>
-          )}
+          }
         </Slider>
         {/* Custom Prev and Next Buttons */}
         <Box
@@ -197,7 +196,7 @@ function HeroSection() {
             onClick={() => sliderRef.current.slickPrev()}
             variant="contained"
             sx={{
-             backgroundColor: "rgba(226, 166, 38, 0.21)",
+              backgroundColor: "rgba(226, 166, 38, 0.21)",
               color: "white",
               "&:hover": { backgroundColor: "rgba(117, 236, 26, 0.8)" },
             }}
@@ -218,9 +217,9 @@ function HeroSection() {
             onClick={() => sliderRef.current.slickNext()}
             variant="contained"
             sx={{
-       backgroundColor: "rgba(226, 166, 38, 0.21)",
+              backgroundColor: "rgba(226, 166, 38, 0.21)",
               color: "white",
-              "&:hover": { backgroundColor: "rgba(71, 236, 26, 0.8)"  },
+              "&:hover": { backgroundColor: "rgba(71, 236, 26, 0.8)" },
             }}
           >
             <ArrowForward />

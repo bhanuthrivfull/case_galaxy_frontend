@@ -16,13 +16,10 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useLanguage } from "../contexts/LanguageContext";
 
 const API_BASE_URL =
   process.env.REACT_APP_API_URL || "http://localhost:5000/api";
-
 function ProductShowcase({ category }) {
-  const { translations, language } = useLanguage();
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -39,7 +36,7 @@ function ProductShowcase({ category }) {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_BASE_URL}/products`);
+      const response = await axios.get(`${API_BASE_URL}/allproducts`);
       setProducts(response.data);
       setError(null);
     } catch (err) {
@@ -49,6 +46,7 @@ function ProductShowcase({ category }) {
       setLoading(false);
     }
   };
+
 
   const handleCardClick = (productId) => {
     navigate(`/product/${productId}`);
@@ -87,7 +85,7 @@ function ProductShowcase({ category }) {
         quantity: 1,
       });
 
-      toast.success(`${product.name} ${translations?.added_to_cart}`, {
+      toast.success(`${product.name} ${"added to cart!"}`, {
         position: "bottom-center",
         autoClose: 3000,
         hideProgressBar: true,
@@ -139,6 +137,8 @@ function ProductShowcase({ category }) {
     );
   }
 
+
+
   return (
     <Box
       id="productshowcase"
@@ -159,7 +159,7 @@ function ProductShowcase({ category }) {
         textAlign="center"
         sx={{ color: " rgb(0, 0, 0)", mb: 4, fontWeight: "bold" }}
       >
-        {category} {translations?.products_title || "Loading..."}
+        {category} {"Products"}
       </Typography>
       <Grid
         container
@@ -167,7 +167,6 @@ function ProductShowcase({ category }) {
         sx={{ display: "flex", justifyContent: "center" }}
       >
         {products
-          .filter(product => product.language === language) // Filter products based on selected language
           .map((product, index) => (
             <Grid item xs={12} sm={6} md={getGridSize()} key={product._id}>
               <motion.div
@@ -267,7 +266,7 @@ function ProductShowcase({ category }) {
                           fontSize: { xs: "1rem", sm: "1.2rem" },
                         }}
                       >
-                        {language === "en" ? "₹" : "¥"}
+                        ₹
                         {parseFloat(product.price - product.discountPrice).toFixed(2)}
                       </Typography>
                       {product.discountPrice > 0 && (
@@ -282,8 +281,7 @@ function ProductShowcase({ category }) {
                             fontSize: { xs: "1.2rem", sm: "1.3rem" },
                           }}
                         >
-                          {language === "en" ? "₹" : "¥"}
-                          {product.price}
+                          ₹{product.price}
                         </Typography>
                       )}
                       {product.discountPrice > 0 && (
@@ -299,7 +297,7 @@ function ProductShowcase({ category }) {
                             },
                           }}
                         >
-                          {translations?.save_title || "Loading..."} {language === "en" ? "₹" : "¥"}
+                          {"Save"} ₹
                           {parseFloat(product.discountPrice).toFixed(2)}
                         </Typography>
                       )}
@@ -337,11 +335,11 @@ function ProductShowcase({ category }) {
                               color: "white",
                             }}
                           />
-                          <span style={{ opacity: 0 }}>{translations?.add_to_cart || "Loading..."}</span>
+                          <span style={{ opacity: 0 }}>{"ADD TO CART"}</span>
                         </>
                       ) : (
                         <span>
-                          {translations?.add_to_cart || "Loading..."}
+                          {"ADD TO CART"}
                         </span>
                       )}
                     </Button>

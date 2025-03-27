@@ -20,14 +20,14 @@ function StatisticalEvidence() {
         textAlign="center"
         sx={{ color: "black", mb: 6 }}
       >
-        {translations?.our_impact?.title}
+        Our Impact
       </Typography>
       <Grid container spacing={4}>
         {/* {stats.map((stat, index) => (
           
         ))} */}
-        {translations?.our_impact?.status_data ? (
-          translations.our_impact.status_data.map((stat, index) => (
+        {
+          stats.map((stat, index) => (
             <Grid item xs={12} md={4} key={index}>
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
@@ -49,7 +49,7 @@ function StatisticalEvidence() {
                   sx={{
                     p: 4,
                     mx: 5,
-                    height:'200px',
+                    height: '200px',
                     textAlign: "center",
                     borderRadius: "12px",
                     bgcolor: index % 2 === 0 ? "rgb(210, 12, 232) " : "rgb(28, 160, 114) ", // Alternate colors for stat cards
@@ -81,9 +81,7 @@ function StatisticalEvidence() {
               </motion.div>
             </Grid>
           ))
-        ) : (
-          <p>Loading...</p>
-        )}
+        }
       </Grid>
     </Box>
   );

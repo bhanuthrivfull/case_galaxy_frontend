@@ -66,10 +66,10 @@ function AdminProfile() {
                 textTransform: "capitalize",
               }}
             >
-              {user?.name || translations?.admin?.profile_tab?.user_name}
+              {user?.name || "Admin"}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              {user?.email || translations?.admin?.profile_tab?.user_email}
+              {user?.email || "admin@example.com"}
             </Typography>
           </Box>
         </Box>
@@ -89,7 +89,7 @@ function AdminProfile() {
             }}
           >
             {/* Role: Admin */}
-            { translations?.admin?.profile_tab?.role}
+            { "Role: Admin"}
           </Typography>
         </motion.div>
       </Paper>

@@ -22,20 +22,50 @@ import AuthLayout from "./AuthLayout";
 import { motion } from "framer-motion";
 import { useLanguage } from "../contexts/LanguageContext";
 
-
-
 const Login = () => {
   const { translations } = useLanguage();
-  console.log(translations?.login?.email_err_msg?.required)
+
   const schema = yup.object().shape({
     email: yup
-      .string()
-      .email(translations?.login?.email_err_msg?.err_msg)
-      .required(translations?.login?.email_err_msg?.required),
+  .string()
+  .required("Email is required.")
+  .transform((value) => value.toLowerCase())
+  .test(
+    "max-length",
+    "Email cannot exceed 50 characters.",
+    (value) => !value || value.length <= 50
+  )
+  .test(
+    "no-special-chars",
+    "Email cannot contain special characters.",
+    (value) => !value || !/[!#$%^&*(),?":{}|<>\-_=+]/.test(value)
+  )
+  .test(
+    "starts-with-letter",
+    "Email must start with a letter.",
+    (value) => !value || /^[a-zA-Z]/.test(value)
+  )
+  .matches(
+    /^[a-zA-Z](?!.*\.\.)[a-zA-Z0-9]*(?:\.[a-zA-Z0-9]+)*@[a-zA-Z]+\.(?:com|org|net|edu|gov|co|io|in|biz|info|tv|us|ca|uk|eu)$/,
+    "Please enter a valid email address (xxx@domain.com)."
+  )
+  .test(
+    "min-length",
+    "Email must be at least 13 characters long.",
+    (value) => !value || value.length >= 13
+  ),
     password: yup
       .string()
-      .required(translations?.login?.psw_err_msg?.required)
-      .min(8, translations?.login?.psw_err_msg?.err_msg),
+      .required( "Password is required.")
+      .test(
+        "no-whitespace",
+        "Password cannot contain spaces.",
+        (value) => !value || !/\s/.test(value)
+      )
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/,
+        "Password must be 8-16 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*)."
+      ),
   });
 
   const {
@@ -57,30 +87,22 @@ const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setGlobalError] = useState("");
 
-  // If user is already logged in, redirect to home
-
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
       setGlobalError("");
 
       const user = await login(data.email, data.password);
-
-      // Reset inactivity timeout after successful login
       resetInactivityTimeout();
 
-      // Check user role and navigate accordingly
       if (user.role === "admin") {
-        // navigate("/admin");
         navigate("/admin", { replace: true });
       } else {
-        // navigate("/", { replace: true });
         window.location.replace("/");
       }
     } catch (err) {
       setGlobalError(err.message || "Login failed. Please try again.");
 
-      // Set field-specific errors if they exist
       if (err.response?.data?.errors) {
         Object.keys(err.response.data.errors).forEach((key) => {
           setError(key, {
@@ -103,12 +125,11 @@ const Login = () => {
     },
   };
 
-
   return (
     <AuthLayout>
       <motion.div initial="hidden" animate="visible" variants={formAnimation}>
         <Typography component="h1" variant="h4" gutterBottom align="center" style={{ fontStyle: "italic", fontWeight: "bold" }}>
-          {translations?.login?.title || "Loading..."}
+          {"Log In"}
         </Typography>
 
         {error && (
@@ -125,7 +146,6 @@ const Login = () => {
             width: "100%",
             maxWidth: "400px",
             mx: "auto",
-
           }}
         >
           <Controller
@@ -139,7 +159,7 @@ const Login = () => {
                 required
                 fullWidth
                 id="email"
-                label={translations?.login?.email_label || "Loading..."}
+                label={"Email Address"}
                 autoComplete="email"
                 autoFocus
                 error={!!errors.email}
@@ -151,6 +171,15 @@ const Login = () => {
                       <Email color="action" />
                     </InputAdornment>
                   ),
+                }}
+                onChange={(e) => {
+                  const lowercaseValue = e.target.value.toLowerCase();
+                  field.onChange({
+                    target: {
+                      name: e.target.name,
+                      value: lowercaseValue
+                    }
+                  });
                 }}
               />
             )}
@@ -166,7 +195,7 @@ const Login = () => {
                 margin="normal"
                 required
                 fullWidth
-                label={translations?.login?.psw_label || "Loading..."}
+                label={"Password"}
                 type={showPassword ? "text" : "password"}
                 id="password"
                 autoComplete="current-password"
@@ -215,7 +244,7 @@ const Login = () => {
             }}
             disabled={isSubmitting}
           >
-            {isSubmitting ? translations?.login?.login_load : translations?.login?.title}
+            {isSubmitting ? "Logging in..." : "Log In"}
           </Button>
 
           <Box
@@ -236,7 +265,7 @@ const Login = () => {
                 navigate("/forgotpassword");
               }}
             >
-              {translations?.login?.forgot_psw || "Loading..."}
+              {"Forgot password?"}
             </Link>
             <Link
               href="/signup"
@@ -246,7 +275,7 @@ const Login = () => {
                 navigate("/signup");
               }}
             >
-              {translations?.login?.dont_have_account || "Loading..."}
+              {"Don't have an account? Sign Up"}
             </Link>
           </Box>
         </Box>

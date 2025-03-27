@@ -40,7 +40,7 @@ function MobileCoverLandingPage() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="container-fluid p-0">
-        <Header />
+        <Header />          
         <HeroSection />
         <USPSection />
         <ProductShowcase />
@@ -55,3 +55,23 @@ function MobileCoverLandingPage() {
 }
 
 export default MobileCoverLandingPage;
+
+
+// Header.js
+// Hero.js
+// Product.js
+// Loading.js
+// Lanauage Selector
+// ProductsShowCase
+// ProductDetails.js
+// ProtuctedRoutes.js
+// USPSections
+
+
+
+// ---Pending Components----
+// Login.js
+// SignUp.js
+// StatisticalEvidence
+// Multistep Checkout
+//

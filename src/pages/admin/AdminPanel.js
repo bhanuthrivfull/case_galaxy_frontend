@@ -106,10 +106,10 @@ function AdminPanel() {
   // ];
 
   const tabOptions = [
-    { label: `👤 ${translations?.admin?.profile}`, value: 0 },
-    { label: `📦  ${translations?.admin?.orders}`, value: 1 },
-    { label: `⚙️  ${translations?.admin?.management}`, value: 2 },
-    { label: `🛍️  ${translations?.admin?.products}`, value: 3 },
+    { label: `👤 Profile`, value: 0 },
+    { label: `📦  Orders`, value: 1 },
+    { label: `⚙️ Management`, value: 2 },
+    { label: `🛍️  Products`, value: 3 },
   ];
 
   return (
@@ -149,7 +149,7 @@ function AdminPanel() {
                 boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <Typography variant="h6">{translations?.admin?.title || "Loading..."}</Typography>
+              <Typography variant="h6">{"Admin Panel"}</Typography>
               <Box>
                 {/* Menu Button */}
                 <LanguageSelector />
@@ -177,7 +177,7 @@ function AdminPanel() {
                   <MenuItem onClick={logout} sx={{ color: "red" }}>
                     <LogoutIcon sx={{ mr: 1 }} />
                      {/* Logout */}
-                     {translations?.admin?.logout || "Loading..."}
+                     {"Logout"}
                   </MenuItem>
                 </Menu>
               </Box>
@@ -204,7 +204,7 @@ function AdminPanel() {
               >
                 <LanguageSelector />
                 <Typography variant="h4" component="h1">
-                  {translations?.admin?.title || "Loading..."}
+                  {"Admin Panel"}
                 </Typography>
 
                 <Button
@@ -214,7 +214,7 @@ function AdminPanel() {
                   startIcon={<LogoutIcon />}
                 >
                   {/* Logout */}
-                  {translations?.admin?.logout || "Loading..."}
+                  {"Logout"}
 
                 </Button>
               </Box>

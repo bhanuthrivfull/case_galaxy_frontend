@@ -38,13 +38,13 @@ function Footer() {
                 textAlign: 'center',
               }}
             >
-              {translations?.footer?.col_one?.title || "Loading..."}
+              {"Case Galaxy"}
             </Typography>
             <Typography
               variant='body2'
               sx={{ lineHeight: 1.8, textAlign: 'center' }}
             >
-              {translations?.footer?.col_one?.description || "Loading..."}
+              {"Elevating device protection since 2025."}
             </Typography>
           </motion.div>
         </Grid>
@@ -64,13 +64,13 @@ function Footer() {
                 textAlign: 'center',
               }}
             >
-              {translations?.footer?.col_two?.title || "Loading..."}
+              {"Contact Us"}
             </Typography>
             <Typography
               variant='body2'
               sx={{ lineHeight: 1.8, textAlign: 'center' }}
             >
-              {translations?.footer?.col_two?.description || "Loading..."}{' '}
+              {"Phone"}{' '}
               <Link color='inherit'>
                 +91 97054 60388
               </Link>
@@ -93,13 +93,13 @@ function Footer() {
                 textAlign: 'center',
               }}
             >
-              {translations?.footer?.col_three?.title || "Loading..."}
+              {"Follow Us"}
             </Typography>
             <Box
               sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 1 }}
             >
               <Link
-                href={translations?.footer?.col_three?.fb_url}
+                href={"https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2F"}
                 color='inherit'
                 target='_blank'
                 sx={{
@@ -110,7 +110,7 @@ function Footer() {
                 <Facebook fontSize='large' />
               </Link>
               <Link
-                href={translations?.footer?.col_three?.insta_url}
+                href={"https://www.instagram.com/?hl=en"}
                 target='_blank'
                 color='inherit'
                 sx={{
@@ -121,7 +121,7 @@ function Footer() {
                 <Instagram fontSize='large' />
               </Link>
               <Link
-                href={translations?.footer?.col_three?.twitter_url}
+                href={"https://x.com/?lang=en&mx=2"}
                 target='_blank'
                 color='inherit'
                 sx={{
@@ -145,9 +145,9 @@ function Footer() {
               component='span'
               sx={{ fontWeight: 'bold', color: 'dark.main' }}
             >
-              {translations?.title || "Loading..."}
+              {"Case Galaxy"}
             </Typography>
-            . {translations?.footer?.copy_right || "Loading..."}
+            . {"All rights reserved."}
           </Typography>
           {/* <Typography variant='body2' sx={{ mt: 1 }}>
             <Link href='#' color='inherit' underline='hover'>

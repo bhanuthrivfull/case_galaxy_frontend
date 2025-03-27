@@ -7,6 +7,7 @@ import {
 } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import { useLanguage } from "../contexts/LanguageContext";
+import { usp_items } from "../constants/data";
 
 const uspItems = [
   {
@@ -37,8 +38,8 @@ function USPSection() {
       }}
     >
       <Grid container spacing={5} justifyContent="center">
-        {translations?.usp_items ? (
-          translations?.usp_items.map((item, index) => (
+        {
+          usp_items.map((item, index) => (
             <Grid item xs={12} sm={6} md={4} key={index} sx={{ maxWidth: 320, width: "100%" }}> {/* Set maxWidth for mobile */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -88,9 +89,7 @@ function USPSection() {
               </motion.div>
             </Grid>
           ))
-        ) : (
-          <p>Loading</p>
-        )}
+        }
       </Grid>
     </Box>
   );

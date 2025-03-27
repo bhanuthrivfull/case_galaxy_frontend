@@ -47,7 +47,7 @@ const ForgotPassword = () => {
 
     // Check if OTP is still valid (5 min)
     if (storedTimestamp && Date.now() - parseInt(storedTimestamp) < 5 * 60 * 1000) {
-      showSnackbar(translations?.forgot_psw?.already_sent_otp, "warning");
+      showSnackbar("Already sent OTP (valid up to 5 min)");
       return;
     }
 
@@ -55,7 +55,7 @@ const ForgotPassword = () => {
       const response = await axios.post("http://localhost:5000/api/auth/send-otp", { email });
       localStorage.setItem("resetOtp", response.data.otp);
       localStorage.setItem("otpTimestamp", Date.now().toString());
-      showSnackbar(translations?.forgot_psw?.otp_sent, "success");
+      showSnackbar("OTP sent successfully!");
     } catch (error) {
       setErrors((prev) => ({ ...prev, email: error.response?.data?.error || "Error sending OTP" }));
     }
@@ -74,7 +74,7 @@ const ForgotPassword = () => {
     localStorage.removeItem("resetOtp");
     localStorage.removeItem("otpTimestamp");
     setOtpVerified(true);
-    showSnackbar(translations?.forgot_psw?.otp_verifyed, "success");
+    showSnackbar("OTP verified successfully!");
   };
 
   const changePassword = async () => {
@@ -87,7 +87,7 @@ const ForgotPassword = () => {
       localStorage.removeItem("otpTimestamp");
       window.location.reload();
     } catch (error) {
-      setErrors((prev) => ({ ...prev, newPassword: translations?.forgot_psw?.err_changing_psw }));
+      setErrors((prev) => ({ ...prev, newPassword: "Error changing password"}));
     }
   };
 
@@ -123,13 +123,13 @@ const ForgotPassword = () => {
             <ArrowBack />
           </IconButton>
           <Typography variant="h4" gutterBottom>
-            {translations?.forgot_psw?.title || "Loading..."}
+            {"Change Password"}
           </Typography>
         </Box>
 
         <TextField
           fullWidth
-          label={translations?.forgot_psw?.email_label}
+          label={"Enter Registered Email"}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           margin="normal"
@@ -159,11 +159,11 @@ const ForgotPassword = () => {
           }}
           onClick={sendOtp}
         >
-          {translations?.forgot_psw?.send_otp || "Loading..."}
+          {"Send OTP"}
         </Button>
         <TextField
           fullWidth
-          label={translations?.forgot_psw?.otp_label}
+          label={"Enter OTP"}
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
           margin="normal"
@@ -176,14 +176,14 @@ const ForgotPassword = () => {
           sx={{ backgroundColor: "#28a745", color: "white", mt: 1, "&:hover": { backgroundColor: "#218838" } }}
           onClick={verifyOtp}
         >
-          {translations?.forgot_psw?.verify_otp || "Loading..."}
+          {"Verify OTP"}
         </Button>
 
         {otpVerified && (
           <>
             <TextField
               fullWidth
-              label={translations?.forgot_psw?.psw_label}
+              label={"New Password"}
               type={showPassword ? "text" : "password"}
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -207,7 +207,7 @@ const ForgotPassword = () => {
               onClick={changePassword}
               disabled={!newPassword}
             >
-              {translations?.forgot_psw?.title || "Loading..."}
+              {"Change Password"}
             </Button>
           </>
         )}
@@ -215,7 +215,7 @@ const ForgotPassword = () => {
           <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
             <Button variant="outlined" fullWidth onClick={() => (window.location.href = "/")}>
               Go to Home
-              {translations?.forgot_psw?.go_to_home || "Loading..."}
+              {"Go to Home"}
 
             </Button>
           </Box>

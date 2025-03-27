@@ -32,14 +32,15 @@ function BenefitsSection() {
 
         sx={{ color: "black", mb: 6 }}
       >
-        {translations?.benefits_data?.title}
+        Exceptional Features
       </Typography>
       <List sx={{ maxWidth: 600, margin: "0 auto" }}>
         {/* {benefits.map((benefit, index) => (
          
         ))} */}
-        {translations?.benefits_data?.benefits ? (
-          translations.benefits_data.benefits.map((benefit, index) => (
+
+        {
+          benefits.map((benefit, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, scale: 0.8 }}
@@ -80,10 +81,7 @@ function BenefitsSection() {
                 </Paper>
               </ListItem>
             </motion.div>
-          ))
-        ) : (
-          <p>Loading...</p>
-        )}
+          ))}
       </List>
     </Box>
   );

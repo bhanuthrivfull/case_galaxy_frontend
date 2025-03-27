@@ -100,7 +100,7 @@ const LeadCaptureForm = () => {
 
   // Validation patterns
   const patterns = {
-    name: /^[A-Z][a-z]*(?:\s[A-Z][a-z]*){0,49}$/,
+    name: /^[A-Z][a-z]*(?:\s[a-zA-Z][a-zA-Z]*){0,49}$/,
     phone: /^(?!.*(\d)\1{6})[6-9]\d{9}$/,
   };
 
@@ -108,13 +108,13 @@ const LeadCaptureForm = () => {
 
   const errorMessages = {
     name: {
-      required: translations?.lead_capture?.name_err_msg?.required || "Name is required",
-      pattern: translations?.lead_capture?.name_err_msg?.pattern ||
+      required: "Name is required",
+      pattern: 
         "Name must start with a capital letter, contain only letters (no numbers or special characters), and allow only a single space between words."
     },
     phone: {
-      required: translations?.lead_capture?.number_err_msg?.required || "Phone number is required",
-      pattern: translations?.lead_capture?.number_err_msg?.pattern ||
+      required: "Phone number is required",
+      pattern: 
         "Phone number must start with a digit between 6 and 9, contain exactly 10 digits, and not have 9 consecutive identical digits."
     }
   };
@@ -205,16 +205,16 @@ const LeadCaptureForm = () => {
       <Container maxWidth={false} disableGutters sx={containerStyles}>
         <Paper elevation={8} sx={paperStyles}>
           <Typography variant="h1" sx={titleStyles}>
-            {translations?.lead_capture?.title || "Loading"}
+            {"Get 15% Exclusive Offers on your first order"}
           </Typography>
           <AnimatePresence>
             {submitted ? (
-              <Alert severity="success">{translations?.lead_capture?.alert || "Congratulations! You got a 15% flat discount."}</Alert>
+              <Alert severity="success">{"Congratulations! You got a 15% flat discount."}</Alert>
             ) : (
               <form onSubmit={handleSubmit}>
                 <Box display="flex" flexDirection="column" gap="1.5rem">
                   <TextField
-                    label={translations?.lead_capture?.name_label || "Full Name"}
+                    label={"Full Name"}
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
@@ -227,7 +227,7 @@ const LeadCaptureForm = () => {
                     }}
                   />
                   <TextField
-                    label={translations?.lead_capture?.number_label || "Phone Number"}
+                    label={ "Phone Number"}
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
@@ -258,7 +258,7 @@ const LeadCaptureForm = () => {
                     {isSubmitting ? (
                       <CircularProgress size={24} />
                     ) : (
-                      <span>{translations?.lead_capture?.btn_title || "Submit"}</span>
+                      <span>{"Submit"}</span>
                     )}
                   </Button>
                 </Box>

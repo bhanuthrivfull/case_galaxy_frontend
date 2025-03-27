@@ -86,7 +86,7 @@ function ProductDetail() {
         quantity: 1,
       });
 
-      toast.success(`${product.name} ${translations?.added_to_cart}`, {
+      toast.success(`${product.name} ${"added to cart!"}`, {
         position: "bottom-center",
         autoClose: 2000,
         hideProgressBar: false,
@@ -267,12 +267,12 @@ function ProductDetail() {
                     precision={0.5}
                   />
                   <Typography variant="body2" color="text.secondary">
-                    ({product.reviews || 0} {translations?.reviews})
+                    ({product.reviews || 0} {"reviews"})
                   </Typography>
                 </Box>
 
                 <Chip
-                  label={product.inStock ? translations?.in_stock : translations?.out_of_stock}
+                  label={product.inStock ? "In Stock" : "Out of Stock"}
                   color={product.inStock ? "success" : "error"}
                   size="small"
                   sx={{ mb: 3 }}
@@ -335,10 +335,10 @@ function ProductDetail() {
                             marginLeft: "-12px",
                           }}
                         />
-                        <span style={{ opacity: 0 }}>{translations?.add_to_cart || "Loading..."}</span>
+                        <span style={{ opacity: 0 }}>{"ADD TO CART"}</span>
                       </>
                     ) : (
-                     <span>{translations?.add_to_cart || "Loading..."}</span>
+                     <span>{"ADD TO CART"}</span>
                     )}
                   </Button>
                 </Box>
