@@ -23,69 +23,76 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 function App() {
   return (
     <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <AuthProvider>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/category/:categoryName" element={<CategoryPage />} />
+      <CssBaseline />
+      <AuthProvider>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/category/:categoryName" element={<CategoryPage />} />
 
-            {/* Protected User Routes */}
-            <Route
-              path="/"
-              element={
-                <AuthenticatedRoute>
-                  <MobileCoverLandingPage />
-                </AuthenticatedRoute>
-              }
-            />
-            <Route
-              path="/product/:productId"
-              element={
-                <AuthenticatedRoute>
-                  <ProductDetail />
-                </AuthenticatedRoute>
-              }
-            />
-            <Route
-              path="/cart"
-              element={
-                <AuthenticatedRoute>
-                  <CartPage />
-                </AuthenticatedRoute>
-              }
-            />
-            <Route
-              path="/forgotpassword"
-              element={
+          {/* Protected User Routes */}
+          <Route
+            path="/"
+            element={
+              <AuthenticatedRoute>
+                <MobileCoverLandingPage />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/product/:productId"
+            element={
+              <AuthenticatedRoute>
+                <ProductDetail />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <AuthenticatedRoute>
+                <CartPage />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/forgotpassword"
+            element={
+              <div style={{
+                backgroundImage: 'url("assets/login_bg.jpg")', alignItems: 'center',
+                justifyContent: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+              }}>
                 <ForgotPassword />
-              }
-            />
+              </div>
+            }
+          />
 
-            {/* Protected Admin Routes */}
-            <Route
-              path="/admin/*"
-              element={
-                <AdminRoute>
-                  <Routes>
-                    <Route path="/" element={<AdminPanel />}>
-                      <Route path="products" element={<ProductManagement />} />
-                      <Route path="orders" element={<OrderManagement />} />
-                      {/* <Route index element={<AdminDashboard />} /> */}
-                      {/* <Route path="users" element={<UserManagement />} /> */}
-                    </Route>
-                  </Routes>
-                </AdminRoute>
-              }
-            />
+          {/* Protected Admin Routes */}
+          <Route
+            path="/admin/*"
+            element={
+              <AdminRoute>
+                <Routes>
+                  <Route path="/" element={<AdminPanel />}>
+                    <Route path="products" element={<ProductManagement />} />
+                    <Route path="orders" element={<OrderManagement />} />
+                    {/* <Route index element={<AdminDashboard />} /> */}
+                    {/* <Route path="users" element={<UserManagement />} /> */}
+                  </Route>
+                </Routes>
+              </AdminRoute>
+            }
+          />
 
-            {/* Error Routes */}
-            {/* <Route path="/404" element={<NotFound />} />
+          {/* Error Routes */}
+          {/* <Route path="/404" element={<NotFound />} />
           <Route path="*" element={<Navigate to="/404" replace />} /> */}
-          </Routes>
-        </AuthProvider>
-      </ThemeProvider>
+        </Routes>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
