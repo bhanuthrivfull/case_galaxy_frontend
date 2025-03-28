@@ -5,7 +5,6 @@ import { useTheme, useMediaQuery } from "@mui/material";
 import { useLanguage } from "../../contexts/LanguageContext";
 
 function AdminProfile() {
-  const { translations } = useLanguage()
   const { user } = useAuth();
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("md")); // Tablets

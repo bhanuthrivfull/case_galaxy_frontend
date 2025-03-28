@@ -23,7 +23,6 @@ import { motion } from "framer-motion";
 import { useLanguage } from "../contexts/LanguageContext";
 
 const Login = () => {
-  const { translations } = useLanguage();
 
   const schema = yup.object().shape({
     email: yup

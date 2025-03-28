@@ -22,8 +22,7 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 
 function App() {
   return (
-    <LanguageProvider>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
         <CssBaseline />
         <AuthProvider>
           <Routes>
@@ -87,7 +86,6 @@ function App() {
           </Routes>
         </AuthProvider>
       </ThemeProvider>
-    </LanguageProvider>
   );
 }
 

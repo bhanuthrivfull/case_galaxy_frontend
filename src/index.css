@@ -116,9 +116,9 @@ html, body {
   .goog-te-gadget span {
     display: none !important;
   }
-  #google_translate_element{
+  /* #google_translate_element{
     width: 70px !important;
-  }
+  } */
 }
 
 

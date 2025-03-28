@@ -26,17 +26,20 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { useLanguage } from '../../contexts/LanguageContext';
 
 const API_BASE_URL = "https://case-galaxy-backend-2ow1.onrender.com/api";
 
 const ProductManagement = () => {
-  const { translations } = useLanguage();
   const theme = useTheme();
-  const { language } = useLanguage();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+
+  const selectedLanguage = localStorage.getItem("selectedLanguage");
+  const currencySymbol = selectedLanguage === 'en' ? '₹' : '¥';
+
+
+
 
   const [formData, setFormData] = useState({
     name: "",
@@ -369,7 +372,7 @@ const ProductManagement = () => {
                 error={!!formErrors.price}
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position="start">{language === "en" ? "₹" : "¥"}</InputAdornment>
+                    <InputAdornment position="start">{currencySymbol}</InputAdornment>
                   ),
                 }}
                 size={isMobile ? "small" : "medium"}
@@ -393,7 +396,7 @@ const ProductManagement = () => {
                 error={!!formErrors.discountPrice}
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position="start">{language === "en" ? "₹" : "¥"}</InputAdornment>
+                    <InputAdornment position="start">{currencySymbol}</InputAdornment>
                   ),
                 }}
                 size={isMobile ? "small" : "medium"}

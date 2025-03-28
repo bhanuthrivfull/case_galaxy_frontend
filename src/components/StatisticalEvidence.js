@@ -10,7 +10,6 @@ const stats = [
 ];
 
 function StatisticalEvidence() {
-  const { translations } = useLanguage();
   return (
     <Box sx={{ py: 8, bgcolor: "white" }}>
       <Typography

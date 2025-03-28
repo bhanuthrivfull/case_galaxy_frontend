@@ -72,7 +72,6 @@ const newTheme = createTheme({
 });
 
 const LeadCaptureForm = () => {
-  const { translations } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",

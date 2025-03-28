@@ -21,7 +21,6 @@ const benefits = [
 ];
 
 function BenefitsSection() {
-  const { translations } = useLanguage();
   return (
     <Box sx={{ py: 8, bgcolor: "white" }}> {/* Changed background to white */}
       <Typography

@@ -114,8 +114,6 @@ const fadeInUp = {
 }
 
 export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
-  const { translations, language } = useLanguage();
-  console.log(JSON.stringify(translations.cards_data))
   const [step, setStep] = useState(1)
   const [direction, setDirection] = useState(0)
   const [formData, setFormData] = useState({
@@ -141,205 +139,165 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const navigate = useNavigate()
 
-  // Validation patterns
-  const patterns = {
-    name: /^[a-zA-Z\s]{2,50}$/,
-    email: /^[a-zA-Z][a-zA-Z0-9]*(\.[a-zA-Z0-9]+)*@[a-zA-Z]+(\.[a-zA-Z]{2,})+$/,
-    phone: /^[6-9]\d{9}$/,
-    city: /^[a-zA-Z\s]{2,50}$/,
-    state: /^[a-zA-Z\s]{2,50}$/,
-    zipCode: /^[\d]{6}$/,
-    cardNumber: /^[\d]{16}$/,
-    cardExpiry: /^(0[1-9]|1[0-2])\/([0-9]{2})$/,
-    cardCvc: /^[\d]{3}$/,
+  const selectedLanguage = localStorage.getItem("selectedLanguage");
+  const currencySymbol = selectedLanguage === 'en' ? '₹' : '¥';
+
+  // Validation functions
+  const validateName = (value) => {
+    if (!value) return "Name is required.";
+
+    if (/[!@#$%^&*(),?":{}|<>\-_=+]/.test(value))
+      return "Name cannot contain special characters.";
+
+    if (/^\s/.test(value))
+      return "Name should not start with a space.";
+
+    if (/\s{2,}/.test(value))
+      return "Name should not contain multiple consecutive spaces.";
+
+    if (/\d/.test(value))
+      return "Name cannot contain numbers.";
+
+    if (!/^[A-Z][a-zA-Z\s]{2,39}$/.test(value))
+      return "Name must start with a capital letter, contain only letters and spaces, and be between 3 to 40 characters long.";
+
+    return ""; // Valid name
+  };
+
+
+  const validateEmail = (value) => {
+    if (!value) return "Email is required.";
+
+    value = value.toLowerCase(); // Convert to lowercase in real-time
+
+    if (value.length > 50) return "Email cannot exceed 50 characters.";
+    if (value.length < 13) return "Email must be at least 13 characters long.";
+
+    if (/[!#$%^&*(),?":{}|<>\-_=+]/.test(value))
+      return "Email cannot contain special characters.";
+
+    if (!/^[a-zA-Z]/.test(value))
+      return "Email must start with a letter.";
+
+    const emailRegex = /^[a-zA-Z][a-zA-Z0-9]*(\.[a-zA-Z0-9]+)*@[a-zA-Z]+(\.[a-zA-Z]{2,})+$/;
+    if (!emailRegex.test(value))
+      return "Please enter a valid email address (user@domain.com).";
+
+    return ""; // No error
+  };
+
+
+  const validatePhone = (value) => {
+    if (!value) return "Phone number is required."
+    if (!/^[6-9]\d{9}$/.test(value)) return "Phone number must be 10 digits and start with 6, 7, 8, or 9."
+    return ""
   }
 
-  // Error messages
-  const errorMessages = {
-    name: "Name should contain only letters and spaces (2-50 characters)",
-    email: "Please enter a valid email address",
-    phone: "Phone number must be 10 digits and start with 6, 7, 8, or 9",
-    address: "Address is required (minimum 10 characters",
-    city: "Enter a valid city",
-    state: "Enter a valid state",
-    zipCode: "ZIP code must be 6 digits",
-    cardNumber: "Card number must be 16 digits",
-    cardExpiry: "Invalid expiry date (MM/YY)",
-    cardCvc: "CVV must be 3 digits",
+  const validateAddress = (value) => {
+    if (!value) return "Address is required."
+    if (value.length < 10) return "Address must be at least 10 characters long."
+    if (/[!@#$%^&*(),?":{}|<>]/.test(value)) return "Address contains invalid special characters."
+    return ""
+  }
+
+  const validateCity = (value) => {
+    if (!value) return "City is required."
+    if (/[!@#$%^&*(),?":{}|<>0-9]/.test(value)) return "City name cannot contain special characters or numbers."
+    if (!/^[A-Za-z\s]{2,}$/.test(value)) return "City name must be at least 2 characters long."
+    return ""
+  }
+
+  const validateState = (value) => {
+    if (!value) return "State is required."
+    if (/[!@#$%^&*(),?":{}|<>0-9]/.test(value)) return "State name cannot contain special characters or numbers."
+    if (!/^[A-Za-z\s]{2,}$/.test(value)) return "State name must be at least 2 characters long."
+    return ""
+  }
+
+  const validateZipCode = (value) => {
+    if (!value) return "ZIP code is required."
+    if (!/^\d{6}$/.test(value)) return "ZIP code must be exactly 6 digits."
+    return ""
+  }
+
+  const validateCardNumber = (value) => {
+    const cleanedValue = value.replace(/\s/g, '')
+    if (!cleanedValue) return "Card number is required."
+
+    // Card type specific validation
+    if (formData.cardType === "American Express") {
+      if (!/^3[47][0-9]{13}$/.test(cleanedValue)) return "American Express cards must start with 34 or 37 and be 15 digits."
+    } else if (formData.cardType === "Visa") {
+      if (!/^4[0-9]{12}(?:[0-9]{3})?$/.test(cleanedValue)) return "Visa cards must start with 4 and be 13 or 16 digits."
+    } else if (formData.cardType === "MasterCard") {
+      if (!/^5[1-5][0-9]{14}$/.test(cleanedValue)) return "MasterCard must start with 51-55 and be 16 digits."
+    } else if (formData.cardType === "JCB") {
+      if (!/^(?:2131|1800|35\d{3})\d{11}$/.test(cleanedValue)) return "JCB cards must start with 2131, 1800, or 35 and be 15-16 digits."
+    } else if (formData.cardType === "Diners Club") {
+      if (!/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/.test(cleanedValue)) return "Diners Club cards must start with 300-305, 36, or 38-39 and be 14 digits."
+    } else if (formData.cardType === "RuPay") {
+      if (!/^6[0-9]{15}$/.test(cleanedValue)) return "RuPay cards must start with 6 and be 16 digits."
+    } else {
+      // Generic validation if no card type selected
+      if (!/^[0-9]{13,19}$/.test(cleanedValue)) return "Card number must be 13-19 digits."
+    }
+
+    if (/(\d)\1{15}/.test(cleanedValue)) return "Card number cannot have all identical digits."
+    return ""
+  }
+
+  const validateCardExpiry = (value) => {
+    if (!value) return "Expiry date is required."
+    if (!/^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(value)) return "Invalid expiry date format (MM/YY)."
+    const [month, year] = value.split("/")
+    const expiryDate = new Date(2000 + Number.parseInt(year), Number.parseInt(month) - 0)
+    if (expiryDate <= new Date()) {
+      return "Expiry date must be in the future"
+    }
+    return ""
+  }
+
+  const validateCardCvc = (value) => {
+    if (!value) return "CVV is required."
+
+    // Card type specific CVC validation
+    if (formData.cardType === "American Express") {
+      if (!/^\d{4}$/.test(value)) return "American Express cards require 4-digit CVV."
+    } else {
+      if (!/^\d{3}$/.test(value)) return "CVV must be 3 digits for this card type."
+    }
+
+    return ""
   }
 
   const personal_details = {
     "title": "Personal Details",
     "full_name": "Full Name",
-    "name_err_msg": {
-      "field": "name",
-      "required_err": "is required",
-      "err_msg": "Name should contain only letters and spaces (2-50 characters)"
-    },
     "email": "Email",
-    "email_err_msg": {
-      "field": "email",
-      "required_err": "is required",
-      "err_msg": "Please enter a valid email address"
-    },
     "phone": "Phone",
-    "phone_err_msg": {
-      "field": "phone",
-      "required_err": "is required",
-      "err_msg": "Phone number must be 10 digits and start with 6, 7, 8, or 9"
-    },
     "address": "Address",
-    "address_err_msg": {
-      "field": "address",
-      "required_err": "is required",
-      "err_msg": "Address is required (minimum 10 characters)"
-    },
     "city_name": "City",
-    "city_err_msg": {
-      "field": "city",
-      "required_err": "is required",
-      "err_msg": "Enter a valid city"
-    },
     "state_name": "State",
-    "state_err_msg": {
-      "field": "state",
-      "required_err": "is required",
-      "err_msg": "Enter a valid state"
-    },
     "zip": "Zip Code",
-    "zipCode_err_msg": {
-      "field": "zipCode",
-      "required_err": "is required",
-      "err_msg": "ZIP code must be 6 digits"
-    },
     "card_number": "Card Number",
-    "cardNumber_err_msg": {
-      "field": "cardNumber",
-      "required_err": "is required",
-      "err_msg": "Card number must be 16 digits"
-    },
     "expiry": "Expiry Date",
-    "cardExpiry_err_msg": {
-      "field": "cardExpiry",
-      "required_err": "expiry is required",
-      "err_msg": "Invalid expiry date (MM/YY)"
-    },
-    "cvv": "CVV",
-    "cardCvc_err_msg": {
-      "field": "cardCvc",
-      "required_err": "cvv is required",
-      "err_msg": "CVV must be 3 digits"
-    }
+    "cvv": "CVV"
   }
 
   const validateField = (name, value) => {
-    const errorKey = `${name}_err_msg`;
-    if (personal_details[errorKey]) {
-      console.log();
-      console.log(personal_details[errorKey].required_err);
-
-      if (!value) return `${personal_details[errorKey].field.charAt(0).toUpperCase() + personal_details[errorKey].field.slice(1)} ${personal_details[errorKey].required_err}`
-      const patterns = {
-        name: /^[a-zA-Z][a-zA-Z\s]*$/, // Updated to prevent leading spaces
-        // ... rest of your patterns
-      }
-      const validateField = (name, value) => {
-        const errorKey = `${name}_err_msg`;
-        if (personal_details[errorKey]) {
-          if (!value) return `${personal_details[errorKey].required_err}`;
-
-          // Email validation with the provided regex
-          if (name === "email") {
-            if (/\s/.test(value)) {
-              return "Email cannot contain spaces";
-            }
-            if (!/^[a-zA-Z][a-zA-Z0-9](\.[a-zA-Z0-9]+)*@[a-zA-Z]+(\.[a-zA-Z]{2,})+$/.test(value)) {
-              return "Invalid email format (e.g., user.name@domain.ab.cd / .xyz)";
-            }
-            if (value.indexOf("@") === -1) {
-              return "Email must contain @ symbol";
-            }
-            if (value.indexOf(".") === -1) {
-              return "Email must contain a domain (e.g., .com)";
-            }
-            if (value.startsWith("@") || value.endsWith("@")) {
-              return "Invalid @ symbol position";
-            }
-            if (value.startsWith(".") || value.endsWith(".")) {
-              return "Email cannot start or end with a dot";
-            }
-            if (value.indexOf("@.") > -1 || value.indexOf(".@") > -1) {
-              return "Invalid character sequence (@. or .@)";
-            }
-            if (value.match(/\.{2,}/)) {
-              return "Email cannot contain consecutive dots";
-            }
-          }
-
-          // ... rest of your existing validations
-        }
-        return "";
-      }
-
+    switch (name) {
+      case "name": return validateName(value)
+      case "email": return validateEmail(value)
+      case "phone": return validatePhone(value)
+      case "address": return validateAddress(value)
+      case "city": return validateCity(value)
+      case "state": return validateState(value)
+      case "zipCode": return validateZipCode(value)
+      case "cardNumber": return validateCardNumber(value)
+      case "cardExpiry": return validateCardExpiry(value)
+      case "cardCvc": return validateCardCvc(value)
+      default: return ""
     }
-    const validateField = (name, value) => {
-      const errorKey = `${name}_err_msg`;
-      if (personal_details[errorKey]) {
-        if (!value) return `${personal_details[errorKey].required_err}`
-
-        // Common validation for city and state
-        if (name === "city" || name === "state") {
-          if (/^\s/.test(value)) {
-            return "Cannot start with space";
-          }
-          if (!/^[a-zA-Z]/.test(value)) {
-            return "Must start with a letter";
-          }
-          if (value.length < 2) {
-            return "Must be at least 2 characters";
-          }
-        }
-
-        // Email validation
-        if (name === "email") {
-          if (/\s/.test(value)) {
-            return "Cannot contain spaces";
-          }
-          if (!/^[a-zA-Z][a-zA-Z0-9]*(\.[a-zA-Z0-9]+)*@[a-zA-Z]+(\.[a-zA-Z]{2,})+$/.test(value)) {
-            return "Invalid email format";
-          }
-        }
-
-        // ... rest of your existing validations
-      }
-      return "";
-    }
-    if (name === "name") {
-      if (/^\s/.test(value)) {
-        return "Name cannot start with a space";
-      }
-      if (!/^[a-zA-Z]/.test(value)) {
-        return "Name must start with a letter";
-      }
-      if (value.length < 3) {
-        return "Name must be at least 3 characters";
-      }
-      if (value.length > 50) {
-        return "Name cannot exceed 50 characters";
-      }
-    }
-
-    //adress validation
-    if (name === "address" && value.length < 10) return errorMessages.address
-
-    if (name === "cardExpiry") {
-      const [month, year] = value.split("/")
-      const expiryDate = new Date(2000 + Number.parseInt(year), Number.parseInt(month) - 0)
-      if (expiryDate <= new Date()) {
-        return "Expiry date must be in the future"
-      }
-    }
-    return ""
   }
 
   const handleBlur = (field) => {
@@ -353,7 +311,7 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
     let isValid = true
 
     if (stepNumber === 1) {
-      ;["name", "email", "phone", "address", "city", "state", "zipCode"].forEach((field) => {
+      ["name", "email", "phone", "address", "city", "state", "zipCode"].forEach((field) => {
         const error = validateField(field, formData[field])
         if (error) {
           newErrors[field] = error
@@ -377,7 +335,7 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
     }
 
     if (stepNumber === 4 && formData.paymentMethod === "card") {
-      ;["cardNumber", "cardExpiry", "cardCvc"].forEach((field) => {
+      ["cardNumber", "cardExpiry", "cardCvc"].forEach((field) => {
         const error = validateField(field, formData[field])
         if (error) {
           newErrors[field] = error
@@ -409,161 +367,90 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
     setStep((prev) => prev - 1)
   }
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target
-  //   let formattedValue = value
-
-  //   // Format specific fields
-  //   switch (name) {
-  //     case "cardNumber":
-  //       formattedValue = value
-  //         .replace(/\s/g, "")
-  //         .replace(/(\d{4})/g, "$1 ")
-  //         .trim()
-  //       break
-  //     case "cardExpiry":
-  //       formattedValue = value
-  //         .replace(/\D/g, "")
-  //         .replace(/(\d{2})(\d)/, "$1/$2")
-  //         .slice(0, 5)
-  //       break
-  //     case "phone":
-  //       formattedValue = value.replace(/\D/g, "").slice(0, 10)
-  //       break
-  //     case "zipCode":
-  //       formattedValue = value.replace(/\D/g, "").slice(0, 6)
-  //       break
-  //     default:
-  //       break
-  //   }
-
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [name]: formattedValue,
-  //   }))
-
-  //   if (touched[name]) {
-  //     const error = validateField(name, formattedValue)
-  //     setErrors((prev) => ({ ...prev, [name]: error }))
-  //   }
-  // }
-
-
-
   const handleInputChange = (e) => {
     const { name, value } = e.target
     let formattedValue = value
+
     switch (name) {
       case "cardNumber":
-        formattedValue = value.replace(/\D/g, "");
+        formattedValue = value.replace(/\D/g, "")
 
-        if (formattedValue.length > 16) {
-          return;
+        // Apply card type specific formatting
+        if (formData.cardType === "American Express") {
+          if (formattedValue.length > 15) return
+          formattedValue = formattedValue.replace(/(\d{4})(\d{6})(\d{5})/, "$1 $2 $3").trim()
+        } else {
+          if (formattedValue.length > 16) return
+          formattedValue = formattedValue.replace(/(\d{4})/g, "$1 ").trim()
         }
+        break
 
-        formattedValue = formattedValue.replace(/(\d{4})/g, "$1 ").trim();
-        break;
-        if (name === "phone") {
-          if (!value) return errorMessages.phone;
-          if (!/^[6789]\d{9}$/.test(value)) return errorMessages.phone;
-          if (/(\d)\1{6,}/.test(value)) {
-            return "Phone number cannot have more than 6 identical consecutive digits";
-          }
-        }
       case "cardExpiry":
-        formattedValue = value.replace(/\D/g, "");
-
-
+        formattedValue = value.replace(/\D/g, "")
         if (formattedValue.length >= 2) {
-          let month = formattedValue.slice(0, 2);
-          let year = formattedValue.slice(2, 4);
-
-
-          if (parseInt(month) > 12) {
-            month = "12";
-          } else if (parseInt(month) < 1) {
-            month = "01";
-          }
-
-
-          formattedValue = month + (year ? "/" + year : "");
-
-
+          let month = formattedValue.slice(0, 2)
+          let year = formattedValue.slice(2, 4)
+          if (parseInt(month) > 12) month = "12"
+          else if (parseInt(month) < 1) month = "01"
+          formattedValue = month + (year ? "/" + year : "")
           if (year.length === 2) {
-            const currentYear = new Date().getFullYear() % 100;
-            if (parseInt(year) < currentYear) {
-              return;
-            }
+            const currentYear = new Date().getFullYear() % 100
+            if (parseInt(year) < currentYear) return
           }
         }
-
-
-        formattedValue = formattedValue.slice(0, 5);
-        break;
+        formattedValue = formattedValue.slice(0, 5)
+        break
       case "address":
-        // Prevent leading spaces
-        formattedValue = value.replace(/^\s+/, '');
-        // If user tries to type space at beginning, show error immediately
+        formattedValue = value.replace(/^\s+/, '')
         if (value.startsWith(' ')) {
-          setErrors(prev => ({
-            ...prev,
-            address: "Address cannot start with a space"
-          }));
+          setErrors(prev => ({ ...prev, address: "Address cannot start with a space" }))
         }
-        break;
-
+        break
       case "phone":
-        let onlyNumbers = value.replace(/\D/g, "");
-
-        // Check for more than 5 identical consecutive digits
+        let onlyNumbers = value.replace(/\D/g, "")
         if (/(\d)\1{6,}/.test(onlyNumbers)) {
-          setErrors(prev => ({
-            ...prev,
-            phone: "Phone number cannot have more than 6 identical consecutive digits"
-          }));
-          return; // Don't update the value
+          setErrors(prev => ({ ...prev, phone: "Phone number cannot have more than 6 identical consecutive digits" }))
+          return
         }
-
-        if (onlyNumbers.length > 0 && !/^[6789]/.test(onlyNumbers)) {
-          return;
-        }
-        formattedValue = onlyNumbers.slice(0, 10);
-        break;
-
+        if (onlyNumbers.length > 0 && !/^[6789]/.test(onlyNumbers)) return
+        formattedValue = onlyNumbers.slice(0, 10)
+        break
       case "zipCode":
         formattedValue = value.replace(/\D/g, "").slice(0, 6)
         break
       case "name":
-        // Prevent leading spaces and allow only letters with single spaces between
         formattedValue = value
-          .replace(/^\s+/, '') // Remove leading spaces
-          .replace(/[^a-zA-Z\s]/g, "") // Remove non-alphabet characters
-          .replace(/\s+/g, ' ') // Replace multiple spaces with single space
-          .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letters
-
-        // If user tries to type space at beginning, show error immediately
+          .replace(/^\s+/, '')
+          .replace(/[^a-zA-Z\s]/g, "")
+          .replace(/\s+/g, ' ')
+          .replace(/\b\w/g, (char) => char.toUpperCase())
         if (value.startsWith(' ')) {
-          setErrors(prev => ({
-            ...prev,
-            name: "Name cannot start with a space"
-          }));
+          setErrors(prev => ({ ...prev, name: "Name cannot start with a space" }))
         }
-        break;
+        break
       case "email":
         formattedValue = value
           .replace(/[,#'"!$%^&*()<>?/|}{[\]`~=+]/g, "")
           .replace(/\s/g, "")
           .replace(/@{2,}/g, "@")
           .replace(/\.{2,}/g, ".")
-
-        break;
-
-
-
-
+        break
+      case "cardType":
+        // When card type changes, reset card number validation
+        setFormData(prev => ({
+          ...prev,
+          cardType: value,
+          cardNumber: ""
+        }))
+        setErrors(prev => ({
+          ...prev,
+          cardNumber: ""
+        }))
+        formattedValue = value
+        break
       default:
         break
-    };
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -599,40 +486,6 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
         toast.error("Please fill in all required shipping details.")
         setLoading(false)
         return
-      }
-      const validateField = (name, value) => {
-        const errorKey = `${name}_err_msg`;
-        if (personal_details[errorKey]) {
-          if (!value) return `${personal_details[errorKey].required_err}`;
-
-          // Email validation
-          if (name === "email") {
-            if (/\s/.test(value)) {
-              return "Email cannot contain spaces";
-            }
-            if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
-              return "Invalid email format (e.g., user@example.com)";
-            }
-            if (value.indexOf("@") === -1) {
-              return "Email must contain @ symbol";
-            }
-            if (value.indexOf(".") === -1) {
-              return "Email must contain a domain (e.g., .com)";
-            }
-            if (value.startsWith("@") || value.endsWith("@")) {
-              return "Invalid @ symbol position";
-            }
-            if (value.startsWith(".") || value.endsWith(".")) {
-              return "Email cannot start or end with a dot";
-            }
-            if (value.indexOf("@.") > -1 || value.indexOf(".@") > -1) {
-              return "Invalid character sequence (@. or .@)";
-            }
-          }
-
-          // ... rest of your existing validations
-        }
-        return "";
       }
 
       const parsedTotal = totalPrice ? Number.parseFloat(totalPrice) : 0
@@ -708,7 +561,7 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
     "Visa",
     "MasterCard",
     "American Express",
-    "Discover"
+    "RuPay"
   ]
 
   const renderCardTypeSelection = () => (
@@ -900,7 +753,6 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     value={formData.name}
                     onChange={(e) => {
                       handleInputChange(e);
-                      // Clear error if user starts typing valid text after initial space
                       if (e.target.value.trim().length > 0 && errors.name === "Name cannot start with a space") {
                         setErrors(prev => ({ ...prev, name: "" }));
                       }
@@ -910,23 +762,12 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     helperText={errors.name}
                     size={isMobile ? "small" : "medium"}
                     inputProps={{
-                      onKeyDown: (e) => {
-                        // Prevent space as first character
-                        if (e.target.value === "" && e.key === " ") {
-                          e.preventDefault();
-                          setErrors(prev => ({ ...prev, name: "Name cannot start with a space" }));
-                        }
-                        // Prevent multiple consecutive spaces
-                        if (e.key === " " && e.target.value.slice(-1) === " ") {
-                          e.preventDefault();
-                        }
-                      },
-                      maxLength: 50, // Maximum 50 characters
-                      pattern: "^[a-zA-Z][a-zA-Z ]{2,49}$", // Regex for 3-50 chars (1 letter + 2-49 letters/spaces)
-                      title: "Name must be 3-50 characters, start with a letter, and only single spaces between words"
+
+                      maxLength: 40,
+                      pattern: "^[A-Z][a-zA-Z\\s]{2,39}$",
+                      title: "Name must be 3-40 characters, start with a capital letter, and contain only letters and spaces"
                     }}
                   />
-                  {/* Email Field */}
                   <TextField
                     fullWidth
                     label={personal_details?.email}
@@ -934,47 +775,38 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     type="email"
                     value={formData.email}
                     onChange={(e) => {
-                      // Clean the input value
                       let value = e.target.value
-                        .replace(/\s/g, '') // Remove all spaces
-                        .replace(/[^a-zA-Z0-9.@_-]/g, "") // Remove special chars except allowed ones
-                        .replace(/@+/g, "@") // Prevent multiple @ symbols
-                        .replace(/\.+/g, ".") // Prevent multiple dots
-                        .replace(/(\.@|@\.)/g, ""); // Prevent dots right before or after @
+                        .toLowerCase() // Convert to lowercase in real-time
+                        .replace(/\s/g, "") // Remove spaces
+                        .replace(/[^a-zA-Z0-9.@_-]/g, "") // Allow only valid email characters
+                        .replace(/@+/g, "@") // Prevent multiple '@' symbols
+                        .replace(/\.+/g, ".") // Prevent multiple '.' in a row
+                        .replace(/(\.@|@\.)/g, ""); // Prevent invalid '@.' patterns
 
-                      // Prevent dots at start or end of local part
                       const atIndex = value.indexOf("@");
                       if (atIndex > 0) {
                         const localPart = value.substring(0, atIndex);
-                        value = localPart.replace(/^\.+|\.+$/g, "") + value.substring(atIndex);
+                        value = localPart.replace(/^\.+|\.+$/g, "") + value.substring(atIndex); // Trim dots at start/end of local part
                       }
-
-                      // Prevent multiple dots in domain part
                       if (atIndex > -1) {
                         const domainPart = value.substring(atIndex);
-                        value = value.substring(0, atIndex) + domainPart.replace(/\.+/g, ".");
+                        value = value.substring(0, atIndex) + domainPart.replace(/\.+/g, "."); // Prevent multiple '.' in domain part
                       }
 
-                      setFormData(prev => ({ ...prev, email: value }));
+                      setFormData((prev) => ({ ...prev, email: value }));
 
-                      // Clear error if user starts typing valid text
+                      // Clear errors if the input becomes valid
                       if (value.trim().length > 0 && errors.email) {
-                        setErrors(prev => ({ ...prev, email: "" }));
+                        setErrors((prev) => ({ ...prev, email: "" }));
                       }
                     }}
                     onBlur={() => handleBlur("email")}
                     onKeyDown={(e) => {
-                      // Prevent space character
                       if (e.key === " ") {
                         e.preventDefault();
-                        setErrors(prev => ({ ...prev, email: "Email cannot contain spaces" }));
+                        setErrors((prev) => ({ ...prev, email: "Email cannot contain spaces" }));
                       }
-                      // Prevent typing @ as first character
-                      if (e.target.value === "" && e.key === "@") {
-                        e.preventDefault();
-                      }
-                      // Prevent typing dot as first character
-                      if (e.target.value === "" && e.key === ".") {
+                      if (e.target.value === "" && (e.key === "@" || e.key === ".")) {
                         e.preventDefault();
                       }
                     }}
@@ -982,10 +814,12 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     helperText={errors.email || ""}
                     size={isMobile ? "small" : "medium"}
                     inputProps={{
-                      pattern: "^[a-zA-Z][a-zA-Z0-9]*(\\.[a-zA-Z0-9]+)*@[a-zA-Z]+(\\.[a-zA-Z]{2,})+$",
-                      title: "Please enter a valid email address (e.g., user.name@domain.xyz/ .ab.cd)"
+                      maxLength: 50,
+                      pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+                      title: "Please enter a valid email address (e.g., user@example.com)"
                     }}
                   />
+
                   <TextField
                     fullWidth
                     label={personal_details?.phone}
@@ -993,8 +827,6 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     value={formData.phone}
                     onChange={(e) => {
                       let value = e.target.value.replace(/\D/g, "");
-
-                      // Prevent more than 5 identical consecutive digits
                       if (/(\d)\1{6,}/.test(value)) {
                         setErrors(prev => ({
                           ...prev,
@@ -1002,15 +834,10 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                         }));
                         return;
                       }
-
-                      // Prevent numbers not starting with 6-9
                       if (value.length > 0 && !/^[6789]/.test(value)) {
                         return;
                       }
-
-                      // Limit to 10 digits
                       value = value.slice(0, 10);
-
                       setFormData(prev => ({ ...prev, phone: value }));
                       setErrors(prev => ({ ...prev, phone: "" }));
                     }}
@@ -1025,8 +852,6 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                       title: 'Enter a valid 10-digit Indian phone number starting with 6-9'
                     }}
                   />
-
-
                   <TextField
                     fullWidth
                     label={personal_details?.address}
@@ -1036,16 +861,14 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     value={formData.address}
                     onChange={(e) => {
                       handleInputChange(e);
-                      // Clear error if user starts typing valid text after initial space
                       if (e.target.value.trim().length > 0 && errors.address === "Address cannot start with a space") {
                         setErrors(prev => ({ ...prev, address: "" }));
                       }
                     }}
                     onBlur={() => {
                       handleBlur("address");
-                      // Additional validation for minimum length
                       if (formData.address.trim().length > 0 && formData.address.trim().length < 10) {
-                        setErrors(prev => ({ ...prev, address: errorMessages.address }));
+                        setErrors(prev => ({ ...prev, address: "Address must be at least 10 characters long" }));
                       }
                     }}
                     error={!!errors.address}
@@ -1053,14 +876,13 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     size={isMobile ? "small" : "medium"}
                     inputProps={{
                       onKeyDown: (e) => {
-                        // Prevent space as first character
                         if (e.target.value === "" && e.key === " ") {
                           e.preventDefault();
                           setErrors(prev => ({ ...prev, address: "Address cannot start with a space" }));
                         }
                       },
                       maxLength: 250,
-                      pattern: "^\\S+(?: \\S+)*$", // Regex to prevent leading/trailing spaces
+                      pattern: "^\\S+(?: \\S+)*$",
                       title: "Address cannot start or end with spaces"
                     }}
                   />
@@ -1071,30 +893,23 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                       gap: 2,
                     }}
                   >
-                    {/* City Field */}
                     <TextField
                       fullWidth
                       label={personal_details?.city_name}
                       name="city"
                       value={formData.city}
                       onChange={(e) => {
-                        // Remove leading spaces and allow only letters and single spaces
                         let value = e.target.value
-                          .replace(/^\s+/, '') // Remove leading spaces
-                          .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphabet characters
-                          .replace(/\s+/g, ' '); // Replace multiple spaces with single space
-
-                        // Update the form data
+                          .replace(/^\s+/, '')
+                          .replace(/[^a-zA-Z\s]/g, '')
+                          .replace(/\s+/g, ' ');
                         setFormData(prev => ({ ...prev, city: value }));
-
-                        // Clear error if user starts typing valid text after initial space
                         if (value.trim().length > 0 && errors.city === "City cannot start with a space") {
                           setErrors(prev => ({ ...prev, city: "" }));
                         }
                       }}
                       onBlur={() => handleBlur("city")}
                       onKeyDown={(e) => {
-                        // Prevent space as first character
                         if (e.target.value === "" && e.key === " ") {
                           e.preventDefault();
                           setErrors(prev => ({ ...prev, city: "City cannot start with a space" }));
@@ -1109,31 +924,23 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                         title: "City must start with a letter and contain only letters and spaces"
                       }}
                     />
-
-                    {/* State Field */}
                     <TextField
                       fullWidth
                       label={personal_details?.state_name}
                       name="state"
                       value={formData.state}
                       onChange={(e) => {
-                        // Remove leading spaces and allow only letters and single spaces
                         let value = e.target.value
-                          .replace(/^\s+/, '') // Remove leading spaces
-                          .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphabet characters
-                          .replace(/\s+/g, ' '); // Replace multiple spaces with single space
-
-                        // Update the form data
+                          .replace(/^\s+/, '')
+                          .replace(/[^a-zA-Z\s]/g, '')
+                          .replace(/\s+/g, ' ');
                         setFormData(prev => ({ ...prev, state: value }));
-
-                        // Clear error if user starts typing valid text after initial space
                         if (value.trim().length > 0 && errors.state === "State cannot start with a space") {
                           setErrors(prev => ({ ...prev, state: "" }));
                         }
                       }}
                       onBlur={() => handleBlur("state")}
                       onKeyDown={(e) => {
-                        // Prevent space as first character
                         if (e.target.value === "" && e.key === " ") {
                           e.preventDefault();
                           setErrors(prev => ({ ...prev, state: "State cannot start with a space" }));
@@ -1159,6 +966,12 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     error={!!errors.zipCode}
                     helperText={errors.zipCode}
                     size={isMobile ? "small" : "medium"}
+                    inputProps={{
+                      maxLength: 6,
+                      inputMode: 'numeric',
+                      pattern: '\\d{6}',
+                      title: 'Enter a valid 6-digit ZIP code'
+                    }}
                   />
                 </Box>
               </motion.div>
@@ -1319,6 +1132,11 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                   <Typography variant="h5" gutterBottom sx={{ color: "white" }}>
                     Card Details
                   </Typography>
+                  {formData.cardType && (
+                    <Typography variant="subtitle2" color="text.secondary">
+                      {formData.cardType} Card
+                    </Typography>
+                  )}
                   <TextField
                     fullWidth
                     label={personal_details.card_number || "Loading..."}
@@ -1329,10 +1147,9 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     error={!!errors.cardNumber}
                     helperText={errors.cardNumber}
                     inputProps={{
-                      maxLength: 19,
+                      maxLength: formData.cardType === "American Express" ? 17 : 19,
                       inputMode: 'numeric',
-                      pattern: "[0-9\\s]{13,19}",
-                      title: "Enter a valid 16-digit card number"
+                      title: `Enter ${formData.cardType || 'card'} number`
                     }}
                     size={isMobile ? "small" : "medium"}
                   />
@@ -1357,30 +1174,27 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                       size={isMobile ? "small" : "medium"}
                     />
                     <TextField
-
                       label={personal_details.cvv || "Loading..."}
                       name="cardCvc"
                       value={formData.cardCvc}
                       onChange={(e) => {
-                        // Only allow numbers
                         const numericValue = e.target.value.replace(/\D/g, '');
-                        e.target.value = numericValue; // Update the event value
-                        handleInputChange(e); // Call the existing handler
+                        e.target.value = numericValue;
+                        handleInputChange(e);
                       }}
                       onBlur={() => handleBlur("cardCvc")}
                       error={!!errors.cardCvc}
                       helperText={errors.cardCvc}
                       type="password"
                       inputProps={{
-                        maxLength: 3,
-                        inputMode: 'numeric' // Shows numeric keyboard on mobile devices
+                        maxLength: formData.cardType === "American Express" ? 4 : 3,
+                        inputMode: 'numeric'
                       }}
                       size={isMobile ? "small" : "medium"}
                     />
                   </Box>
                 </Box>
               </motion.div>
-
             )}
 
             {((step === 3 && formData.paymentMethod === "cod") ||
@@ -1497,7 +1311,7 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                                   {item.quantity}
                                 </TableCell>
                                 <TableCell align="right">
-                                  {language === "en" ? "₹" : "¥"}
+                                  {currencySymbol}
                                   {((item.productId.price - item.productId.discountPrice) * item.quantity).toFixed(2)}
                                 </TableCell>
                               </TableRow>
@@ -1519,7 +1333,7 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                           <strong>Your Cart</strong>
                         </Typography>
                         <Typography variant="subtitle1" color="primary">
-                          <strong>{language === "en" ? "₹" : "¥"}{totalPrice}</strong>
+                          <strong>{currencySymbol}{totalPrice}</strong>
                         </Typography>
                       </Box>
                     </Paper>
@@ -1561,11 +1375,9 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                   onClick={handleNext}
                   fullWidth={isMobile}
                   sx={{
-                    background:
-                      " #BB86FC ",
+                    background: " #BB86FC ",
                     "&:hover": {
-                      background:
-                        " #02b3a9 ",
+                      background: " #02b3a9 ",
                     },
                   }}
                 >
@@ -1580,11 +1392,9 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     fullWidth={isMobile}
                     disabled={loading}
                     sx={{
-                      background:
-                        " #BB86FC ",
+                      background: " #BB86FC ",
                       "&:hover": {
-                        background:
-                          " #02b3a9",
+                        background: " #02b3a9",
                       },
                     }}
                   >
@@ -1605,11 +1415,9 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                     }}
                     fullWidth={isMobile}
                     sx={{
-                      background:
-                        " #BB86FC ",
+                      background: " #BB86FC ",
                       "&:hover": {
-                        background:
-                          " #02b3a9 ",
+                        background: " #02b3a9 ",
                       },
                     }}
                   >
@@ -1623,4 +1431,3 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
     </ThemeProvider>
   );
 }
-

@@ -9,13 +9,13 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  Tooltip,
 } from "@mui/material";
 import { Visibility, VisibilityOff, ArrowBack } from "@mui/icons-material";
 import axios from "axios";
 import { useLanguage } from "../contexts/LanguageContext";
 import LanguageSelector from "./LanguageSelector";
 const ForgotPassword = () => {
-  const { translations } = useLanguage();
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -87,9 +87,91 @@ const ForgotPassword = () => {
       localStorage.removeItem("otpTimestamp");
       window.location.reload();
     } catch (error) {
-      setErrors((prev) => ({ ...prev, newPassword: "Error changing password"}));
+      setErrors((prev) => ({ ...prev, newPassword: "Error changing password" }));
     }
   };
+
+
+  useEffect(() => {
+    const scriptId = "google-translate-script";
+
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.type = "text/javascript";
+      script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      document.body.appendChild(script);
+    }
+
+    window.googleTranslateElementInit = () => {
+      const element = document.getElementById("google_translate_element");
+      if (element && element.innerHTML.trim() === "") {
+        const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
+
+        new window.google.translate.TranslateElement(
+          {
+            pageLanguage: "en",
+            includedLanguages: "en,zh-TW,zh-HK",
+            autoDisplay: false,
+            defaultLanguage: savedLanguage,
+          },
+          "google_translate_element"
+        );
+
+        if (savedLanguage && savedLanguage !== 'en') {
+          setTimeout(() => {
+            const selectElement = document.querySelector('.goog-te-combo');
+            if (selectElement) {
+              selectElement.value = savedLanguage;
+              selectElement.dispatchEvent(new Event('change'));
+            }
+          }, 1000);
+        }
+      }
+    };
+
+    const handleLanguageChange = () => {
+      const selectElement = document.querySelector('.goog-te-combo');
+      if (selectElement) {
+        selectElement.addEventListener('change', (e) => {
+          const selectedLanguage = e.target.value;
+          localStorage.setItem('selectedLanguage', selectedLanguage);
+
+          const previousLanguage = localStorage.getItem('previousLanguage');
+          if (selectedLanguage !== previousLanguage) {
+            localStorage.setItem('previousLanguage', selectedLanguage);
+            window.location.reload();
+          }
+        });
+      }
+    };
+
+    const checkForSelectElement = setInterval(() => {
+      const selectElement = document.querySelector('.goog-te-combo');
+      if (selectElement) {
+        handleLanguageChange();
+        clearInterval(checkForSelectElement);
+      }
+    }, 500);
+
+    return () => {
+      clearInterval(checkForSelectElement);
+    };
+  }, []);
+
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    if (reload) {
+      window.location.reload();
+      setReload(false);
+    }
+  }, [reload]);
+
+  const handleReloadClick = () => {
+    setReload(true);
+  };
+
 
   return (
     <Container maxWidth="sm"
@@ -102,9 +184,37 @@ const ForgotPassword = () => {
       }}
     >
       <Box className='d-flex position-absolute ' sx={{ top: '20px', right: '20px' }}>
-        <div className='d-flex flex-column'>
+        <div className='d-flex align-items-center gap-1'>
           {/* <h6 className='text-white'>Change Language</h6> */}
-          <LanguageSelector />
+          <Tooltip title="Language" placement="bottom">
+            <Box onClick={handleReloadClick} sx={{ cursor: 'pointer' }}>
+              <Typography>🌐</Typography>
+            </Box>
+          </Tooltip>
+          <Box>
+            <div id="google_translate_element" />
+            <style>
+              {`
+                      #google_translate_element select {
+                        background-color: #f5f5f5;
+                        border: 2px solid #007bff;
+                        border-radius: 8px;
+                        padding: 8px;
+                        font-size: 14px;
+                        color: #333;
+                        outline: none;
+                        transition: all 0.3s ease;
+                      }
+                      #google_translate_element select:hover {
+                        border-color: #0056b3;
+                      }
+                      #google_translate_element select:focus {
+                        border-color: #004085;
+                        box-shadow: 0 0 8px rgba(0, 91, 187, 0.4);
+                      }
+                    `}
+            </style>
+          </Box>
         </div>
       </Box>
       <Box

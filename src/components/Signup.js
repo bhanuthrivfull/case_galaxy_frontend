@@ -30,7 +30,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../contexts/LanguageContext";
 
 const Signup = () => {
-  const { translations } = useLanguage();
 
   const schema = yup.object().shape({
     name: yup

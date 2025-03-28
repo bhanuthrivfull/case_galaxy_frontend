@@ -11,6 +11,7 @@ import LeadCaptureForm from "./components/LeadCaptureForm";
 import BenefitsSection from "./components/BenefitsSection";
 import StatisticalEvidence from "./components/StatisticalEvidence";
 import Footer from "./components/Footer";
+import TestProduct from "./components/TestProduct";
 
 const theme = createTheme({
   palette: {

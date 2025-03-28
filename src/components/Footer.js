@@ -5,7 +5,6 @@ import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 function Footer() {
-  const { translations } = useLanguage();
   return (
     <Box
       sx={{

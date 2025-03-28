@@ -156,8 +156,6 @@ function Header(props) {
     window.scrollTo(0, 0);
   };
 
-  const { translations } = useLanguage()
-  console.log('Responss==>', translations)
   return (
     <>
       <motion.div>

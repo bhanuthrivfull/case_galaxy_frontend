@@ -30,7 +30,6 @@ const reviews = [
 ];
 
 function CustomerReviews() {
-  const { translations } = useLanguage();
   return (
     <Box sx={{ py: 12, background: "#ffffff", color: "white" }}>
       <Container maxWidth="md">

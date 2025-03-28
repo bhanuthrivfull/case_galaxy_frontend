@@ -10,7 +10,6 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { hero_carousel } from "../constants/data";
 
 function HeroSection() {
-  const { translations } = useLanguage();
   const sliderRef = useRef(null);
   const settings = {
     dots: true,

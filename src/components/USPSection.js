@@ -28,7 +28,6 @@ const uspItems = [
 ];
 
 function USPSection() {
-  const { translations } = useLanguage();
   return (
     <Box
       sx={{

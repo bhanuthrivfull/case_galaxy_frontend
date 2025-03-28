@@ -24,12 +24,10 @@ import Header from "./Header";
 import MultiStepCheckoutForm from "./MultiStepCheckoutForm";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useLanguage } from "../contexts/LanguageContext";
 
 const API_BASE_URL = "https://case-galaxy-backend-2ow1.onrender.com/api";
 
 function ProductDetail() {
-  const {translations,language} = useLanguage();
   const { productId } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -43,6 +41,29 @@ function ProductDetail() {
   const [addingToCart, setAddingToCart] = useState(false);
   const [processingBuyNow, setProcessingBuyNow] = useState(false);
   const [openImageDialog, setOpenImageDialog] = useState(false);
+
+  const selectedLanguage = localStorage.getItem("selectedLanguage");
+  const currencySymbol = selectedLanguage === 'en' ? '₹' : '¥';
+
+  // Price Converter
+  const [exchangeRates, setExchangeRates] = useState({});
+  const [currency, setCurrency] = useState("INR");
+
+  const getCurrencyFromLanguage = () => {
+    const lang = localStorage.getItem("selectedLanguage");
+    if (lang === "zh-TW") return "CNY";
+    return "INR";
+  };
+
+  useEffect(() => {
+    fetch("https://api.exchangerate-api.com/v4/latest/INR")
+      .then(res => res.json())
+      .then(data => setExchangeRates(data.rates))
+      .catch(error => console.error("Error fetching exchange rates:", error));
+
+    setCurrency(getCurrencyFromLanguage());
+  }, []);
+
 
   useEffect(() => {
     fetchProductDetails();
@@ -172,6 +193,18 @@ function ProductDetail() {
     );
   }
 
+  const orgPrice = (product.price - product.discountPrice).toFixed(2);
+  const conOrgPrice = exchangeRates[currency]
+    ? (orgPrice * exchangeRates[currency]).toFixed(2)
+    : orgPrice;
+
+  const actualPrice = product.price;
+  const conActPrice = exchangeRates[currency]
+    ? (actualPrice * exchangeRates[currency]).toFixed(2)
+    : actualPrice;
+
+
+
   return (
     <>
       <Header />
@@ -287,7 +320,7 @@ function ProductDetail() {
                     fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
                   }}
                 >
-                  {language==="en"?"₹":"¥"}{(product.price - product.discountPrice).toFixed(2)}
+                  {currencySymbol} {conOrgPrice}
                 </Typography>
 
                 {product.discountPrice && (
@@ -296,7 +329,7 @@ function ProductDetail() {
                     color="error"
                     sx={{ mb: 1, textDecoration: "line-through" }}
                   >
-                    {language==="en"?"₹":"¥"}{product.price}
+                    {currencySymbol}{conActPrice}
                   </Typography>
                 )}
 
@@ -338,7 +371,7 @@ function ProductDetail() {
                         <span style={{ opacity: 0 }}>{"ADD TO CART"}</span>
                       </>
                     ) : (
-                     <span>{"ADD TO CART"}</span>
+                      <span>{"ADD TO CART"}</span>
                     )}
                   </Button>
                 </Box>
