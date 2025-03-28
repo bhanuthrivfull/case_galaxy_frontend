@@ -33,6 +33,35 @@ function CartPage() {
   const [language, setLanguage] = useState(localStorage.getItem("selectedLanguage") || 'en');
   const currencySymbol = language === 'en' ? '₹' : '¥';
 
+
+  
+  // Price Converter
+  const [exchangeRates, setExchangeRates] = useState({});
+  const [currency, setCurrency] = useState("INR");
+
+  const getCurrencyFromLanguage = () => {
+    const lang = localStorage.getItem("selectedLanguage");
+    if (lang === "zh-TW") return "CNY";
+    return "INR";
+  };
+
+  useEffect(() => {
+    fetch("https://api.exchangerate-api.com/v4/latest/INR")
+      .then(res => res.json())
+      .then(data => setExchangeRates(data.rates))
+      .catch(error => console.error("Error fetching exchange rates:", error));
+
+    setCurrency(getCurrencyFromLanguage());
+  }, []);
+
+  const convertPrice = (price) => {
+    const rate = exchangeRates[currency] || 1;
+    return (price * rate).toFixed(2);
+  };
+
+
+
+
   useEffect(() => {
     const checkLanguageChange = setInterval(() => {
       const currentLanguage = localStorage.getItem("selectedLanguage") || 'en';
@@ -46,7 +75,7 @@ function CartPage() {
 
   useEffect(() => {
     if (!userEmail) {
-      toast.error(language === 'en' ? "User not logged in!" : "用户未登录!");
+      toast.error( "User not logged in!" );
       navigate("/login");
       return;
     }
@@ -64,7 +93,7 @@ function CartPage() {
       const response = await axios.get(`${API_BASE_URL}/users/getUserId/${userEmail}`);
       setUserId(response.data.userId);
     } catch (err) {
-      toast.error(language === 'en' ? "Failed to fetch user ID." : "获取用户ID失败");
+      toast.error("Failed to fetch user ID." );
       console.error("Error fetching user ID:", err);
     }
   };
@@ -77,7 +106,7 @@ function CartPage() {
       const validItems = (cartData.items || []).filter(item => item?.productId);
       setCart({ ...cartData, items: validItems });
     } catch (err) {
-      toast.error(language === 'en' ? "Failed to load cart." : "加载购物车失败");
+      toast.error("Failed to load cart." );
       console.error("Error fetching cart:", err);
     } finally {
       setLoading(false);
@@ -92,10 +121,10 @@ function CartPage() {
         ...prevCart,
         items: prevCart.items.filter(item => item?.productId?._id !== productId)
       }));
-      toast.success(language === 'en' ? "Item removed from cart!" : "商品已从购物车移除!");
+      toast.success( "Item removed from cart!" );
       window.dispatchEvent(new Event('cartUpdated'));
     } catch (err) {
-      toast.error(language === 'en' ? "Failed to remove item." : "移除商品失败");
+      toast.error("Failed to remove item.");
       console.error("Error removing item:", err);
     }
   };
@@ -122,7 +151,7 @@ function CartPage() {
       }));
       window.dispatchEvent(new Event('cartUpdated'));
     } catch (err) {
-      toast.error(language === 'en' ? "Failed to update quantity." : "更新数量失败");
+      toast.error("Failed to update quantity." );
       console.error("Error updating quantity:", err);
     }
   };
@@ -139,7 +168,7 @@ function CartPage() {
 
   const handleProceedToBuy = () => {
     if (cart.items.length === 0) {
-      toast.error(language === 'en' ? "Your cart is empty!" : "您的购物车是空的!");
+      toast.error("Your cart is empty!" );
       return;
     }
     setIsCheckoutOpen(true);
@@ -177,155 +206,110 @@ function CartPage() {
               fontSize: { xs: "1.5rem", sm: "2rem" },
             }}
           >
-            {language === 'en' ? "Your Cart" : "您的购物车"}
+            { "Your Cart" }
           </Typography>
           
           {loading ? (
             <Typography variant="body1" sx={{ mt: 2, color: "text.secondary" }}>
-              {language === 'en' ? "Loading your cart..." : "正在加载您的购物车..."}
+              { "Loading your cart..." }
             </Typography>
           ) : cart.items.length === 0 ? (
             <Box sx={{ textAlign: 'center', py: 4 }}>
               <ShoppingCart sx={{ fontSize: 48, color: 'text.disabled', mb: 2 }} />
               <Typography variant="body1" sx={{ mt: 2, color: "text.secondary" }}>
-                {language === 'en' ? "Your cart is empty" : "您的购物车是空的"}
+                {"Your cart is empty" }
               </Typography>
               <Button 
                 variant="outlined" 
                 sx={{ mt: 3 }}
                 onClick={() => navigate('/')}
               >
-                {language === 'en' ? "Continue Shopping" : "继续购物"}
+                { "Continue Shopping" }
               </Button>
             </Box>
           ) : (
             <Box>
-              <List>
-                {cart.items.map((item) => (
-                  <React.Fragment key={item.productId._id}>
-                    <ListItem
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: 3,
-                        py: 3,
-                        px: 2,
-                        flexDirection: { xs: "column", sm: "row" },
-                      }}
-                    >
-                      {/* Product Image - Updated to prevent cutting */}
-                      <Box sx={{ 
-                        flexShrink: 0,
-                        width: { xs: '100%', sm: 120 },
-                        height: 120,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        overflow: 'hidden',
-                        borderRadius: 1,
-                        bgcolor: 'background.paper'
-                      }}>
-                        <Box
-                          component="img"
-                          src={item.productId.image}
-                          alt={item.productId.model || (language === 'en' ? "Product" : "产品")}
-                          sx={{
-                            maxWidth: '100%',
-                            maxHeight: '100%',
-                            objectFit: 'contain'
-                          }}
+            <List>
+              {cart.items.map(
+                (item) =>
+                  item?.productId && (
+                    <React.Fragment key={item.productId._id}>
+                      <ListItem
+                        sx={{
+                          flexDirection: { xs: "column", sm: "row" },
+                          alignItems: "center",
+                        }}
+                      >
+                        <ListItemAvatar>
+                          <Avatar
+                            alt={item.productId.model || "Product"}
+                            src={item.productId.image}
+                            variant="square"
+                            sx={{
+                              width: { xs: 60, sm: 80 },
+                              height: { xs: 60, sm: 80 },
+                              mb: { xs: 1, sm: 0 },
+                            }}
+                          />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={item.productId.model || "Unknown Product"}
+                          secondary={
+                            <>
+                              <Typography component="span" variant="body2" color="text.primary">
+                                {currency} {convertPrice(item.productId.price - item.productId.discountPrice)}
+                              </Typography>
+                              {item.productId.discountPrice && (
+                                <Typography
+                                  component="span"
+                                  variant="body2"
+                                  color="text.secondary"
+                                  sx={{
+                                    textDecoration: "line-through",
+                                    ml: 1,
+                                    fontSize: "0.9rem",
+                                  }}
+                                >
+                                  {currency} {convertPrice(item.productId.price)}
+                                </Typography>
+                              )}
+                              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                                <IconButton onClick={() => updateQuantity(item.productId._id, -1)} disabled={item.quantity <= 1}>
+                                  <Remove />
+                                </IconButton>
+                                <Typography sx={{ mx: 1 }}>{item.quantity || 1}</Typography>
+                                <IconButton onClick={() => updateQuantity(item.productId._id, 1)}>
+                                  <Add />
+                                </IconButton>
+                              </Box>
+                            </>
+                          }
                         />
-                      </Box>
-
-                      {/* Product Details */}
-                      <Box sx={{ 
-                        flexGrow: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 1,
-                        minWidth: 0
-                      }}>
-                        <Typography 
-                          variant="h6" 
-                          sx={{ 
-                            fontWeight: 600,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical'
-                          }}
-                        >
-                          {item.productId.model || (language === 'en' ? "Unknown Product" : "未知产品")}
-                        </Typography>
-
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <Typography variant="body1" color="primary" fontWeight="bold">
-                            {currencySymbol}{(item.productId.price - (item.productId.discountPrice || 0)).toFixed(2)}
-                          </Typography>
-                          {item.productId.discountPrice && (
-                            <Typography
-                              variant="body2"
-                              color="text.secondary"
-                              sx={{ textDecoration: "line-through" }}
-                            >
-                              {currencySymbol}{item.productId.price}
-                            </Typography>
-                          )}
-                        </Box>
-
-                        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                          <IconButton
-                            onClick={() => updateQuantity(item.productId._id, -1)}
-                            disabled={item.quantity <= 1}
-                            size="small"
-                          >
-                            <Remove fontSize="small" />
-                          </IconButton>
-                          <Typography sx={{ mx: 1, minWidth: '20px', textAlign: 'center' }}>
-                            {item.quantity || 1}
-                          </Typography>
-                          <IconButton
-                            onClick={() => updateQuantity(item.productId._id, 1)}
-                            size="small"
-                          >
-                            <Add fontSize="small" />
-                          </IconButton>
-                        </Box>
-                      </Box>
-
-                      {/* Remove Button */}
-                      <Box sx={{ alignSelf: { sm: 'flex-start' } }}>
-                        <Button
-                          startIcon={<DeleteOutline />}
-                          onClick={() => removeFromCart(item.productId._id)}
-                          color="error"
-                          size="small"
-                        >
-                          {language === 'en' ? "Remove" : "移除"}
+                        <Button startIcon={<DeleteOutline />} onClick={() => removeFromCart(item.productId._id)} color="error">
+                          Remove
                         </Button>
-                      </Box>
-                    </ListItem>
-                    <Divider variant="inset" component="li" />
-                  </React.Fragment>
-                ))}
-              </List>
-              <Box sx={{ mt: 5, textAlign: "right" }}>
-                <Typography variant="h6" sx={{ mb: 2 }}>
-                  {language === 'en' ? "Total" : "总计"}: {currencySymbol}{getTotalPrice()}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="info"
-                  startIcon={<ShoppingCart />}
-                  onClick={handleProceedToBuy}
-                  size="large"
-                  fullWidth
-                >
-                  {language === 'en' ? "Proceed to Buy" : "继续购买"}
-                </Button>
-              </Box>
+                      </ListItem>
+                      <Divider variant="inset" component="li" />
+                    </React.Fragment>
+                  )
+              )}
+            </List>
+            <Box sx={{ mt: 5, textAlign: "right" }}>
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                Total: {currency} {convertPrice(getTotalPrice())}
+              </Typography>
+              <Button
+                variant="contained"
+                color="info"
+                startIcon={<ShoppingCart />}
+                onClick={handleProceedToBuy}
+                size="large"
+                fullWidth
+              >
+                Proceed to Buy
+              </Button>
             </Box>
+          </Box>
           )}
         </Paper>
         <Dialog
