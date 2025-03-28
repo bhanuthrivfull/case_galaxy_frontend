@@ -81,7 +81,7 @@ const Signup = () => {
         (value) => !value || /^[a-zA-Z]/.test(value)
       )
       .matches(
-        /^[a-zA-Z](?!.*\.\.)[a-zA-Z0-9]*(?:\.[a-zA-Z0-9]+)*@[a-zA-Z]+\.(?:com|org|net|edu|gov|co|io|in|biz|info|tv|us|ca|uk|eu)$/,
+        /^[a-zA-Z][a-zA-Z0-9]*(\.[a-zA-Z0-9]+)*@[a-zA-Z]+(\.[a-zA-Z]{2,})+$/,
         "Please enter a valid email address (user@domain.com)."
       )
       .test(
