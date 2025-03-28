@@ -16,6 +16,7 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Tooltip,
 } from "@mui/material";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
@@ -31,87 +32,87 @@ import LanguageSelector from "../../components/LanguageSelector";
 import { useLanguage } from "../../contexts/LanguageContext";
 function AdminPanel() {
 
-  
-    useEffect(() => {
-      const scriptId = "google-translate-script";
-  
-      if (!document.getElementById(scriptId)) {
-        const script = document.createElement("script");
-        script.id = scriptId;
-        script.type = "text/javascript";
-        script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-        document.body.appendChild(script);
-      }
-  
-      window.googleTranslateElementInit = () => {
-        const element = document.getElementById("google_translate_element");
-        if (element && element.innerHTML.trim() === "") {
-          const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
-  
-          new window.google.translate.TranslateElement(
-            {
-              pageLanguage: "en",
-              includedLanguages: "en,zh-TW,zh-HK",
-              autoDisplay: false,
-              defaultLanguage: savedLanguage,
-            },
-            "google_translate_element"
-          );
-  
-          if (savedLanguage && savedLanguage !== 'en') {
-            setTimeout(() => {
-              const selectElement = document.querySelector('.goog-te-combo');
-              if (selectElement) {
-                selectElement.value = savedLanguage;
-                selectElement.dispatchEvent(new Event('change'));
-              }
-            }, 1000);
-          }
-        }
-      };
-  
-      const handleLanguageChange = () => {
-        const selectElement = document.querySelector('.goog-te-combo');
-        if (selectElement) {
-          selectElement.addEventListener('change', (e) => {
-            const selectedLanguage = e.target.value;
-            localStorage.setItem('selectedLanguage', selectedLanguage);
-  
-            const previousLanguage = localStorage.getItem('previousLanguage');
-            if (selectedLanguage !== previousLanguage) {
-              localStorage.setItem('previousLanguage', selectedLanguage);
-              window.location.reload();
+
+  useEffect(() => {
+    const scriptId = "google-translate-script";
+
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.type = "text/javascript";
+      script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      document.body.appendChild(script);
+    }
+
+    window.googleTranslateElementInit = () => {
+      const element = document.getElementById("google_translate_element");
+      if (element && element.innerHTML.trim() === "") {
+        const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
+
+        new window.google.translate.TranslateElement(
+          {
+            pageLanguage: "en",
+            includedLanguages: "en,zh-TW,zh-HK",
+            autoDisplay: false,
+            defaultLanguage: savedLanguage,
+          },
+          "google_translate_element"
+        );
+
+        if (savedLanguage && savedLanguage !== 'en') {
+          setTimeout(() => {
+            const selectElement = document.querySelector('.goog-te-combo');
+            if (selectElement) {
+              selectElement.value = savedLanguage;
+              selectElement.dispatchEvent(new Event('change'));
             }
-          });
+          }, 1000);
         }
-      };
-  
-      const checkForSelectElement = setInterval(() => {
-        const selectElement = document.querySelector('.goog-te-combo');
-        if (selectElement) {
-          handleLanguageChange();
-          clearInterval(checkForSelectElement);
-        }
-      }, 500);
-  
-      return () => {
-        clearInterval(checkForSelectElement);
-      };
-    }, []);
-  
-    const [reload, setReload] = useState(false);
-  
-    useEffect(() => {
-      if (reload) {
-        window.location.reload();
-        setReload(false);
       }
-    }, [reload]);
-  
-    const handleReloadClick = () => {
-      setReload(true);
     };
-  
+
+    const handleLanguageChange = () => {
+      const selectElement = document.querySelector('.goog-te-combo');
+      if (selectElement) {
+        selectElement.addEventListener('change', (e) => {
+          const selectedLanguage = e.target.value;
+          localStorage.setItem('selectedLanguage', selectedLanguage);
+
+          const previousLanguage = localStorage.getItem('previousLanguage');
+          if (selectedLanguage !== previousLanguage) {
+            localStorage.setItem('previousLanguage', selectedLanguage);
+            window.location.reload();
+          }
+        });
+      }
+    };
+
+    const checkForSelectElement = setInterval(() => {
+      const selectElement = document.querySelector('.goog-te-combo');
+      if (selectElement) {
+        handleLanguageChange();
+        clearInterval(checkForSelectElement);
+      }
+    }, 500);
+
+    return () => {
+      clearInterval(checkForSelectElement);
+    };
+  }, []);
+
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    if (reload) {
+      window.location.reload();
+      setReload(false);
+    }
+  }, [reload]);
+
+  const handleReloadClick = () => {
+    setReload(true);
+  };
+
 
   const { translations } = useLanguage();
   const [value, setValue] = useState(0);
@@ -199,7 +200,7 @@ function AdminPanel() {
 
 
 
-  
+
 
 
   return (
@@ -242,8 +243,38 @@ function AdminPanel() {
               <Typography variant="h6">{"Admin Panel"}</Typography>
               <Box>
                 {/* Menu Button */}
-                <LanguageSelector />
-                
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Tooltip title="Language" placement="bottom">
+                    <Box onClick={handleReloadClick} sx={{ cursor: 'pointer' }}>
+                      <Typography>🌐</Typography>
+                    </Box>
+                  </Tooltip>
+                  <Box >
+                    <div id="google_translate_element" />
+                    <style>
+                      {`
+                      #google_translate_element select {
+                        background-color: #f5f5f5;
+                        border: 2px solid #007bff;
+                        border-radius: 8px;
+                        padding: 8px;
+                        font-size: 14px;
+                        color: #333;
+                        outline: none;
+                        transition: all 0.3s ease;
+                      }
+                      #google_translate_element select:hover {
+                        border-color: #0056b3;
+                      }
+                      #google_translate_element select:focus {
+                        border-color: #004085;
+                        box-shadow: 0 0 8px rgba(0, 91, 187, 0.4);
+                      }
+                    `}
+                    </style>
+                  </Box>
+                </Box>
+
                 <IconButton onClick={handleMenuOpen}>
                   <MenuIcon />
                 </IconButton>
@@ -266,8 +297,8 @@ function AdminPanel() {
                   ))}
                   <MenuItem onClick={logout} sx={{ color: "red" }}>
                     <LogoutIcon sx={{ mr: 1 }} />
-                     {/* Logout */}
-                     {"Logout"}
+                    {/* Logout */}
+                    {"Logout"}
                   </MenuItem>
                 </Menu>
               </Box>
@@ -292,10 +323,16 @@ function AdminPanel() {
                   alignItems: "center",
                 }}
               >
-               <Box>
-                  <div id="google_translate_element" />
-                  <style>
-                    {`
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Tooltip title="Language" placement="bottom">
+                    <Box onClick={handleReloadClick} sx={{ cursor: 'pointer' }}>
+                      <Typography>🌐</Typography>
+                    </Box>
+                  </Tooltip>
+                  <Box >
+                    <div id="google_translate_element" />
+                    <style>
+                      {`
                       #google_translate_element select {
                         background-color: #f5f5f5;
                         border: 2px solid #007bff;
@@ -314,11 +351,11 @@ function AdminPanel() {
                         box-shadow: 0 0 8px rgba(0, 91, 187, 0.4);
                       }
                     `}
-                  </style>
-                </Box> 
+                    </style>
+                  </Box>
+                </Box>
 
 
-               
 
 
                 <Typography variant="h4" component="h1">

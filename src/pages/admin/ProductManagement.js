@@ -99,7 +99,7 @@ const ProductManagement = () => {
     switch (name) {
       case "name":
         if (!value) {
-          errorMessage = translations?.admin?.products_tab?.name_required || "Product name is required.";
+          errorMessage =  "Product name is required.";
         } else if (value.length > 35) {
           errorMessage = "Product name must not exceed 30 characters.";
         } else if (!/^[A-Za-z]+(?:\s[A-Za-z]+)*$/.test(value)) {
@@ -112,7 +112,7 @@ const ProductManagement = () => {
 
       case "model":
         if (!value) {
-          errorMessage = translations?.admin?.products_tab?.model_required || "Brand and model is required.";
+          errorMessage =  "Brand and model is required.";
         } else if (value.length > 30) {
           errorMessage = "Model must not exceed 30 characters.";
         } else if (!/^[A-Za-z][A-Za-z0-9]*(?:\s[A-Za-z0-9]+)*$/.test(value)) {
@@ -125,13 +125,13 @@ const ProductManagement = () => {
 
       case "price":
         if (!value) {
-          errorMessage = translations?.admin?.products_tab?.price_required || "Price is required.";
+          errorMessage = "Price is required.";
         } else if (Number(value) < 2) {
           errorMessage =
-            translations?.admin?.products_tab?.regular_price_min_error || "Price must be greater than 2.";
+           "Price must be greater than 2.";
         } else if (Number(value) > 10000) {
           errorMessage =
-            translations?.admin?.products_tab?.regular_price_max_error || "Price must be less than 10,000.";
+            "Price must be less than 10,000.";
         }
         // When price changes, revalidate discountPrice with the updated data
         if (updatedData.discountPrice) {
@@ -139,7 +139,7 @@ const ProductManagement = () => {
             setFormErrors((prev) => ({
               ...prev,
               discountPrice:
-                translations?.admin?.products_tab?.discount_price_comparison_error ||
+              
                 "Discount price should be less than regular price.",
             }));
           } else {
@@ -154,28 +154,28 @@ const ProductManagement = () => {
       case "discountPrice":
         if (!value) {
           errorMessage =
-            translations?.admin?.products_tab?.discount_price_required || "Discount price is required.";
+             "Discount price is required.";
         } else if (Number(value) >= Number(updatedData.price)) {
           errorMessage =
-            translations?.admin?.products_tab?.discount_price_comparison_error ||
+     
             "Discount price should be less than regular price.";
         } else if (Number(value) < 1) {
           errorMessage =
-            translations?.admin?.products_tab?.discount_price_min_error || "Discount price must be greater than 0.";
+         "Discount price must be greater than 0.";
         }
         break;
 
       case "category":
         if (!value) {
           errorMessage =
-            translations?.admin?.products_tab?.category_required || "Category is required.";
+            "Category is required.";
         }
         break;
 
       case "description":
         if (!value) {
           errorMessage =
-            translations?.admin?.products_tab?.description_required || "Description is required.";
+           "Description is required.";
         } else if (!/[A-Za-z]/.test(value)) {
           errorMessage = "Description must contain at least one letter and should not start with an empty space.";
         } else if (!/^[^\s]+(?:\s[^\s]+)*$/.test(value)) {
@@ -189,7 +189,7 @@ const ProductManagement = () => {
 
       case "image":
         if (!value) {
-          errorMessage = translations?.admin?.products_tab?.image_required || "Image URL is required.";
+          errorMessage =  "Image URL is required.";
         } else if (!/^(https?:\/\/[^\s]+\.[^\s]+)$/i.test(value)) {
           errorMessage =
             "Please enter a valid image URL (must start with http:// or https:// and have a valid domain).";
@@ -247,7 +247,7 @@ const ProductManagement = () => {
       setSnackbar({
         open: true,
         message:
-          translations?.admin?.products_tab?.form_invalid || "Please fix the errors in the form.",
+          "Please fix the errors in the form.",
         severity: "error",
       });
       setLoading(false);
@@ -267,12 +267,12 @@ const ProductManagement = () => {
       });
 
       if (!response.ok) {
-        throw new Error(translations?.admin?.products_tab?.product_add_failed);
+        throw new Error("Failed to add product");
       }
 
       setSnackbar({
         open: true,
-        message: translations?.admin?.products_tab?.product_add_success,
+        message: "Product added successfully!",
         severity: "success",
       });
       resetForm();
@@ -313,102 +313,100 @@ const ProductManagement = () => {
               color: theme.palette.primary.main,
             }}
           >
-            {translations?.admin?.products_tab?.title || "Loading..."}
+            {"Product Management"}
           </Typography>
         </Box>
+        <form id="en" onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            {/* Basic Information Section */}
+            <Grid item xs={12}>
+              <Typography variant="h6" sx={{ mb: 2, fontSize: { xs: "1rem", sm: "1.25rem" } }}>
+                {"Basic Information"}
+              </Typography>
+            </Grid>
 
-        {language === "en" ? (
-          <form id="en" onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              {/* Basic Information Section */}
-              <Grid item xs={12}>
-                <Typography variant="h6" sx={{ mb: 2, fontSize: { xs: "1rem", sm: "1.25rem" } }}>
-                  {translations?.admin?.products_tab?.basic_info || "Loading..."}
-                </Typography>
-              </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Product Name"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur} // Added onBlur
+                required
+                size={isMobile ? "small" : "medium"}
+                error={!!formErrors.name}
+                helperText={formErrors.name}
+              />
+            </Grid>
 
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Product Name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  onBlur={handleInputBlur} // Added onBlur
-                  required
-                  size={isMobile ? "small" : "medium"}
-                  error={!!formErrors.name}
-                  helperText={formErrors.name}
-                />
-              </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Brand & Model"
+                name="model"
+                value={formData.model}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur} // Added onBlur
+                required
+                size={isMobile ? "small" : "medium"}
+                error={!!formErrors.model}
+                helperText={formErrors.model}
+              />
+            </Grid>
 
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Brand & Model"
-                  name="model"
-                  value={formData.model}
-                  onChange={handleInputChange}
-                  onBlur={handleInputBlur} // Added onBlur
-                  required
-                  size={isMobile ? "small" : "medium"}
-                  error={!!formErrors.model}
-                  helperText={formErrors.model}
-                />
-              </Grid>
+            {/* Pricing Section */}
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Price"
+                name="price"
+                type="number"
+                value={formData.price}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur} // Added onBlur
+                required
+                error={!!formErrors.price}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">{language === "en" ? "₹" : "¥"}</InputAdornment>
+                  ),
+                }}
+                size={isMobile ? "small" : "medium"}
+                inputProps={{
+                  min: 2,
+                  max: 10000,
+                }}
+                helperText={formErrors.price}
+              />
+            </Grid>
 
-              {/* Pricing Section */}
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Price"
-                  name="price"
-                  type="number"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  onBlur={handleInputBlur} // Added onBlur
-                  required
-                  error={!!formErrors.price}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">{language === "en" ? "₹" : "¥"}</InputAdornment>
-                    ),
-                  }}
-                  size={isMobile ? "small" : "medium"}
-                  inputProps={{
-                    min: 2,
-                    max: 10000,
-                  }}
-                  helperText={formErrors.price}
-                />
-              </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Discount Price"
+                name="discountPrice"
+                type="number"
+                value={formData.discountPrice}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur} // Ensure onBlur is added
+                error={!!formErrors.discountPrice}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">{language === "en" ? "₹" : "¥"}</InputAdornment>
+                  ),
+                }}
+                size={isMobile ? "small" : "medium"}
+                inputProps={{
+                  min: 1,
+                  max: 10000,
+                }}
+                helperText={formErrors.discountPrice}
+              />
+            </Grid>
 
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Discount Price"
-                  name="discountPrice"
-                  type="number"
-                  value={formData.discountPrice}
-                  onChange={handleInputChange}
-                  onBlur={handleInputBlur} // Ensure onBlur is added
-                  error={!!formErrors.discountPrice}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">{language === "en" ? "₹" : "¥"}</InputAdornment>
-                    ),
-                  }}
-                  size={isMobile ? "small" : "medium"}
-                  inputProps={{
-                    min: 1,
-                    max: 10000,
-                  }}
-                  helperText={formErrors.discountPrice}
-                />
-              </Grid>
-
-              {/* Add this after the price fields to show validation messages */}
-              {/* <Grid item xs={12}>
+            {/* Add this after the price fields to show validation messages */}
+            {/* <Grid item xs={12}>
                 {formErrors.price && (
                   <Typography color="error" variant="caption">
                     {formErrors.price}
@@ -416,251 +414,6 @@ const ProductManagement = () => {
                 )}
               </Grid> */}
 
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required size={isMobile ? "small" : "medium"}>
-                  <InputLabel
-                    sx={{
-                      color: "#000",
-                      backgroundColor: formData.category ? "#fff" : "transparent",
-                      textDecoration: "none",
-                      padding: "0 4px",
-                      "&.Mui-focused": {
-                        color: "#6C63FF",
-                        backgroundColor: "#fff",
-                      },
-                    }}
-                  >
-                    Category
-                  </InputLabel>
-                  <Select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    onBlur={handleInputBlur} // Added onBlur
-                    displayEmpty
-                    sx={{
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        border: "1px solid #ccc",
-                      },
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        border: "1px solid #999",
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        border: "2px solidrgb(141, 230, 162)",
-                      },
-                      backgroundColor: "rgba(178, 242, 182, 0.79)",
-                    }}
-                    error={!!formErrors.category}
-                  >
-                    <MenuItem value="Mobile">📱 Mobile</MenuItem>
-                    <MenuItem value="Tablet">📟 Tablet</MenuItem>
-
-                    <MenuItem
-                      value="Laptop"
-                      disabled
-                      sx={{ textDecoration: "line-through", color: "gray" }}
-                    >
-                      💻 Laptop (Out of Stock)
-                    </MenuItem>
-                    <MenuItem
-                      value="Smartwatch"
-                      disabled
-                      sx={{ textDecoration: "line-through", color: "gray" }}
-                    >
-                      ⌚ Smartwatch (Coming Soon)
-                    </MenuItem>
-                  </Select>
-                  {formErrors.category && (
-                    <Typography color="error" variant="caption">
-                      {formErrors.category}
-                    </Typography>
-                  )}
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Image URL"
-                  name="image"
-                  value={formData.image}
-                  onChange={handleInputChange}
-                  onBlur={handleInputBlur} // Added onBlur
-                  required
-                  InputProps={{
-                    endAdornment: formData.image && (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setFormData((prev) => ({ ...prev, image: "" }))}
-                          edge="end"
-                        >
-                          <ClearIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                    startAdornment: <InputAdornment position="start"><ImageIcon /></InputAdornment>,
-                  }}
-                  size={isMobile ? "small" : "medium"}
-                  error={!!formErrors.image}
-                  helperText={formErrors.image}
-                />
-              </Grid>
-
-              {/* Description Section */}
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  onBlur={handleInputBlur} // Added onBlur
-                  required
-                  multiline
-                  rows={4}
-                  size={isMobile ? "small" : "medium"}
-                  error={!!formErrors.description}
-                  helperText={formErrors.description}
-                />
-              </Grid>
-
-              {/* Stock Status Section */}
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Switch checked={formData.inStock} onChange={handleStockToggle} color="primary" />
-                  }
-                  label="In Stock"
-                />
-              </Grid>
-
-              {/* Action Buttons */}
-              <Grid item xs={12}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    flexDirection: isMobile ? "column" : "row",
-                    justifyContent: "flex-end",
-                    mt: 2,
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    onClick={resetForm}
-                    disabled={loading}
-                    fullWidth={isMobile}
-                    sx={{ minWidth: { sm: "120px" } }}
-                  >
-                    Reset
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disabled={loading}
-                    fullWidth={isMobile}
-                    sx={{ minWidth: { sm: "120px" } }}
-                    startIcon={loading ? <CircularProgress size={20} /> : <AddIcon />}
-                  >
-                    {loading ? "Adding..." : "Add Product"}
-                  </Button>
-                </Box>
-              </Grid>
-            </Grid>
-          </form>
-        ) : (
-          <form id="zh" onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            {/* Basic Information Section */}
-            <Grid item xs={12}>
-              <Typography variant="h6" sx={{ mb: 2, fontSize: { xs: "1rem", sm: "1.25rem" } }}>
-                {translations?.admin?.products_tab?.basic_info || "Basic Information"}
-              </Typography>
-            </Grid>
-    
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label={translations?.admin?.products_tab?.product_name_label || "Product Name"}
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                required
-                error={!!formErrors.name}
-                helperText={formErrors.name}
-                size={isMobile ? "small" : "medium"}
-              />
-            </Grid>
-    
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label={translations?.admin?.products_tab?.product_brand_label || "Product Model"}
-                name="model"
-                value={formData.model}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                required
-                error={!!formErrors.model}
-                helperText={formErrors.model}
-                size={isMobile ? "small" : "medium"}
-              />
-            </Grid>
-    
-            {/* Pricing Section */}
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label={translations?.admin?.products_tab?.product_price_label || "Price"}
-                name="price"
-                type="number"
-                value={formData.price}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                required
-                error={!!formErrors.price}
-                helperText={formErrors.price}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">{language === "en" ? "₹" : "¥"}</InputAdornment>
-                  ),
-                }}
-                size={isMobile ? "small" : "medium"}
-                inputProps={{ min: 2, max: 10000 }}
-              />
-            </Grid>
-    
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label={translations?.admin?.products_tab?.product_discount_label || "Discount Price"}
-                name="discountPrice"
-                type="number"
-                value={formData.discountPrice}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                error={!!formErrors.discountPrice}
-                helperText={formErrors.discountPrice}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">{language === "en" ? "₹" : "¥"}</InputAdornment>
-                  ),
-                }}
-                size={isMobile ? "small" : "medium"}
-                inputProps={{ min: 1, max: 10000 }}
-              />
-            </Grid>
-    
-            <Grid item xs={12}>
-              {formErrors.price || formErrors.discountPrice ? (
-                <Typography color="error" variant="caption">
-                  {formErrors.price || formErrors.discountPrice}
-                </Typography>
-              ) : null}
-            </Grid>
-    
-            {/* Category */}
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth required size={isMobile ? "small" : "medium"}>
                 <InputLabel
@@ -669,46 +422,76 @@ const ProductManagement = () => {
                     backgroundColor: formData.category ? "#fff" : "transparent",
                     textDecoration: "none",
                     padding: "0 4px",
-                    "&.Mui-focused": { color: "#6C63FF", backgroundColor: "#fff" },
+                    "&.Mui-focused": {
+                      color: "#6C63FF",
+                      backgroundColor: "#fff",
+                    },
                   }}
                 >
-                  {translations?.admin?.products_tab?.category_title || "Category"}
+                  Category
                 </InputLabel>
                 <Select
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  onBlur={handleInputBlur}
+                  onBlur={handleInputBlur} // Added onBlur
                   displayEmpty
+                  sx={{
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      border: "1px solid #ccc",
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      border: "1px solid #999",
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      border: "2px solidrgb(141, 230, 162)",
+                    },
+                    backgroundColor: "rgba(178, 242, 182, 0.79)",
+                  }}
                   error={!!formErrors.category}
                 >
-                  <MenuItem value="Mobile">📱 {translations?.admin?.products_tab?.category_opt_mobile || "Mobile"}</MenuItem>
-                  <MenuItem value="Tablet">📟 {translations?.admin?.products_tab?.category_opt_tab || "Tablet"}</MenuItem>
-                  <MenuItem value="Laptop" disabled>💻 {translations?.admin?.products_tab?.laptop_stock_out || "Laptop (Out of Stock)"}</MenuItem>
-                  <MenuItem value="Smartwatch" disabled>⌚ {translations?.admin?.products_tab?.smart_watch || "Smartwatch (Out of Stock)"}</MenuItem>
+                  <MenuItem value="Mobile">📱 Mobile</MenuItem>
+                  <MenuItem value="Tablet">📟 Tablet</MenuItem>
+
+                  <MenuItem
+                    value="Laptop"
+                    disabled
+                    sx={{ textDecoration: "line-through", color: "gray" }}
+                  >
+                    💻 Laptop (Out of Stock)
+                  </MenuItem>
+                  <MenuItem
+                    value="Smartwatch"
+                    disabled
+                    sx={{ textDecoration: "line-through", color: "gray" }}
+                  >
+                    ⌚ Smartwatch (Coming Soon)
+                  </MenuItem>
                 </Select>
                 {formErrors.category && (
-                  <Typography color="error" variant="caption">{formErrors.category}</Typography>
+                  <Typography color="error" variant="caption">
+                    {formErrors.category}
+                  </Typography>
                 )}
               </FormControl>
             </Grid>
-    
-            {/* Image */}
+
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label={translations?.admin?.products_tab?.img_url_label || "Image URL"}
+                label="Image URL"
                 name="image"
                 value={formData.image}
                 onChange={handleInputChange}
-                onBlur={handleInputBlur}
+                onBlur={handleInputBlur} // Added onBlur
                 required
-                error={!!formErrors.image}
-                helperText={formErrors.image}
                 InputProps={{
                   endAdornment: formData.image && (
                     <InputAdornment position="end">
-                      <IconButton onClick={() => setFormData((prev) => ({ ...prev, image: "" }))}>
+                      <IconButton
+                        onClick={() => setFormData((prev) => ({ ...prev, image: "" }))}
+                        edge="end"
+                      >
                         <ClearIcon />
                       </IconButton>
                     </InputAdornment>
@@ -716,66 +499,73 @@ const ProductManagement = () => {
                   startAdornment: <InputAdornment position="start"><ImageIcon /></InputAdornment>,
                 }}
                 size={isMobile ? "small" : "medium"}
+                error={!!formErrors.image}
+                helperText={formErrors.image}
               />
             </Grid>
-    
-            {/* Description */}
+
+            {/* Description Section */}
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label={translations?.admin?.products_tab?.desc_label || "Description"}
+                label="Description"
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                onBlur={handleInputBlur}
+                onBlur={handleInputBlur} // Added onBlur
                 required
-                error={!!formErrors.description}
-                helperText={formErrors.description}
                 multiline
                 rows={4}
                 size={isMobile ? "small" : "medium"}
+                error={!!formErrors.description}
+                helperText={formErrors.description}
               />
             </Grid>
-    
-            {/* Stock */}
+
+            {/* Stock Status Section */}
             <Grid item xs={12}>
               <FormControlLabel
                 control={
-                  <Switch
-                    checked={formData.inStock}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, inStock: e.target.checked }))}
-                    color="primary"
-                  />
+                  <Switch checked={formData.inStock} onChange={handleStockToggle} color="primary" />
                 }
-                label={translations?.admin?.products_tab?.in_stock_label || "In Stock"}
+                label="In Stock"
               />
             </Grid>
-    
+
             {/* Action Buttons */}
             <Grid item xs={12}>
-              <Box sx={{ display: "flex", gap: 2, flexDirection: isMobile ? "column" : "row", justifyContent: "flex-end", mt: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  flexDirection: isMobile ? "column" : "row",
+                  justifyContent: "flex-end",
+                  mt: 2,
+                }}
+              >
                 <Button
                   variant="outlined"
-                  onClick={() => setFormData({ ...formData, name: "", model: "", price: "", discountPrice: "", category: "", image: "", description: "", inStock: false })}
+                  onClick={resetForm}
                   disabled={loading}
                   fullWidth={isMobile}
+                  sx={{ minWidth: { sm: "120px" } }}
                 >
-                  {translations?.admin?.products_tab?.reset_btn || "Reset"}
+                  Reset
                 </Button>
                 <Button
                   type="submit"
                   variant="contained"
                   disabled={loading}
                   fullWidth={isMobile}
+                  sx={{ minWidth: { sm: "120px" } }}
                   startIcon={loading ? <CircularProgress size={20} /> : <AddIcon />}
                 >
-                  {loading ? translations?.admin?.products_tab?.loading_btn?.adding : translations?.admin?.products_tab?.loading_btn?.add_product}
+                  {loading ? "Adding..." : "Add Product"}
                 </Button>
               </Box>
             </Grid>
           </Grid>
         </form>
-        )}
       </Paper>
 
       {/* Snackbar for notifications */}
