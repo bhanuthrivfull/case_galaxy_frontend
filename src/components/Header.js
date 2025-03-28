@@ -39,7 +39,7 @@ function Header(props) {
 
     try {
       const response = await axios.get(
-        `https://case-galaxy-backend-2ow1.onrender.com/api/cart/${currentUser.id}`
+        `http://localhost:5000/api/cart/${currentUser.id}`
       );
       const cartItems = response.data.items || [];
       const itemCount = cartItems.reduce(

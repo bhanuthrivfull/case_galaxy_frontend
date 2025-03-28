@@ -18,7 +18,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "https://case-galaxy-backend-2ow1.onrender.com/api";
+  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 function ProductShowcase({ category }) {
   const navigate = useNavigate();
   const theme = useTheme();

@@ -17,7 +17,7 @@ export const LanguageProvider = ({ children }) => {
   useEffect(() => {
     const fetchTranslations = async () => {
       try {
-        const response = await axios.get(`https://case-galaxy-backend-2ow1.onrender.com/api/translations/${language}`);
+        const response = await axios.get(`http://localhost:5000/api/translations/${language}`);
         setTranslations(response.data);
       } catch (error) {
         console.error("Error fetching translations:", error);

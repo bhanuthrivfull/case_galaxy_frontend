@@ -52,7 +52,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await axios.post("https://case-galaxy-backend-2ow1.onrender.com/api/auth/send-otp", { email });
+      const response = await axios.post("http://localhost:5000/api/auth/send-otp", { email });
       localStorage.setItem("resetOtp", response.data.otp);
       localStorage.setItem("otpTimestamp", Date.now().toString());
       showSnackbar("OTP sent successfully!");
@@ -80,7 +80,7 @@ const ForgotPassword = () => {
   const changePassword = async () => {
     setErrors({});
     try {
-      await axios.post("https://case-galaxy-backend-2ow1.onrender.com/api/auth/update-password", { email, newPassword });
+      await axios.post("http://localhost:5000/api/auth/update-password", { email, newPassword });
       setPasswordChanged(true);
       showSnackbar("Password changed successfully!", "success");
       localStorage.removeItem("resetOtp");
