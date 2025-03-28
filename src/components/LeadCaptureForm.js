@@ -108,8 +108,8 @@ const LeadCaptureForm = () => {
 
   const errorMessages = {
     name: {
-      required: "Name is required",
-      pattern: 
+      required:  "Name is required",
+      pattern:
         "Name must start with a capital letter, contain only letters (no numbers or special characters), and allow only a single space between words."
     },
     phone: {
@@ -205,16 +205,16 @@ const LeadCaptureForm = () => {
       <Container maxWidth={false} disableGutters sx={containerStyles}>
         <Paper elevation={8} sx={paperStyles}>
           <Typography variant="h1" sx={titleStyles}>
-            {"Get 15% Exclusive Offers on your first order"}
+            Get 15% Exclusive Offers on your first order
           </Typography>
           <AnimatePresence>
             {submitted ? (
-              <Alert severity="success">{"Congratulations! You got a 15% flat discount."}</Alert>
+              <Alert severity="success">{ "Congratulations! You got a 15% flat discount."}</Alert>
             ) : (
               <form onSubmit={handleSubmit}>
                 <Box display="flex" flexDirection="column" gap="1.5rem">
                   <TextField
-                    label={"Full Name"}
+                    label={ "Full Name"}
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
@@ -258,7 +258,7 @@ const LeadCaptureForm = () => {
                     {isSubmitting ? (
                       <CircularProgress size={24} />
                     ) : (
-                      <span>{"Submit"}</span>
+                      <span>{ "Submit"}</span>
                     )}
                   </Button>
                 </Box>
