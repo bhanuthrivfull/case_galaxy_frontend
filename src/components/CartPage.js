@@ -257,7 +257,7 @@ function CartPage() {
                           secondary={
                             <>
                               <Typography component="span" variant="body2" color="text.primary">
-                                {currency} {convertPrice(item.productId.price - item.productId.discountPrice)}
+                                {currencySymbol} {convertPrice(item.productId.price - item.productId.discountPrice)}
                               </Typography>
                               {item.productId.discountPrice && (
                                 <Typography
@@ -270,7 +270,7 @@ function CartPage() {
                                     fontSize: "0.9rem",
                                   }}
                                 >
-                                  {currency} {convertPrice(item.productId.price)}
+                                  {currencySymbol} {convertPrice(item.productId.price)}
                                 </Typography>
                               )}
                               <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
@@ -296,7 +296,7 @@ function CartPage() {
             </List>
             <Box sx={{ mt: 5, textAlign: "right" }}>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                Total: {currency} {convertPrice(getTotalPrice())}
+                Total: {currencySymbol} {convertPrice(getTotalPrice())}
               </Typography>
               <Button
                 variant="contained"
