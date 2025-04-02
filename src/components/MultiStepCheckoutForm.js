@@ -27,7 +27,7 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import { useLanguage } from "../contexts/LanguageContext"
 
-const API_BASE_URL = "https://case-galaxy-backend-2ow1.onrender.com/api"
+const API_BASE_URL = "http://localhost:5000/api"
 
 // Enhanced dark theme
 const darkTheme = createTheme({
@@ -114,6 +114,33 @@ const fadeInUp = {
 }
 
 export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
+
+
+  // Price Converter
+  const [exchangeRates, setExchangeRates] = useState({});
+  const [currency, setCurrency] = useState("INR");
+
+  const getCurrencyFromLanguage = () => {
+    const lang = localStorage.getItem("selectedLanguage");
+    if (lang === "zh-TW") return "CNY";
+    return "INR";
+  };
+
+  useEffect(() => {
+    fetch("https://api.exchangerate-api.com/v4/latest/INR")
+      .then(res => res.json())
+      .then(data => setExchangeRates(data.rates))
+      .catch(error => console.error("Error fetching exchange rates:", error));
+
+    setCurrency(getCurrencyFromLanguage());
+  }, []);
+
+  const convertPrice = (price) => {
+    const rate = exchangeRates[currency] || 1;
+    return (price * rate).toFixed(2);
+  };
+
+
   const [step, setStep] = useState(1)
   const [direction, setDirection] = useState(0)
   const [formData, setFormData] = useState({
@@ -1333,8 +1360,9 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                           <strong>Your Cart</strong>
                         </Typography>
                         <Typography variant="subtitle1" color="primary">
-                          <strong>{currencySymbol}{totalPrice}</strong>
+                          <strong>{currencySymbol}{convertPrice(totalPrice)}</strong>
                         </Typography>
+
                       </Box>
                     </Paper>
                   </Box>
