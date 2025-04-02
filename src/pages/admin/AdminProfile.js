@@ -51,7 +51,7 @@ function AdminProfile() {
                 fontWeight: "bold",
               }}
             >
-              {user?.name?.[0]?.toUpperCase() || "A"}
+              {user?.name?.[0]?.toUpperCase()}
             </Avatar>
           </motion.div>
 
