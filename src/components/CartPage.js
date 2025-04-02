@@ -20,12 +20,13 @@ import Header from "./Header.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const API_BASE_URL = "https://case-galaxy-backend-2ow1.onrender.com/api";
+const API_BASE_URL = "http://localhost:5000/api";
 
 function CartPage() {
   const [cart, setCart] = useState({ items: [] });
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0); // Add forceUpdate state
   const navigate = useNavigate();
 
   const userEmail = localStorage.getItem("userEmail");
@@ -33,8 +34,6 @@ function CartPage() {
   const [language, setLanguage] = useState(localStorage.getItem("selectedLanguage") || 'en');
   const currencySymbol = language === 'en' ? '₹' : '¥';
 
-
-  
   // Price Converter
   const [exchangeRates, setExchangeRates] = useState({});
   const [currency, setCurrency] = useState("INR");
@@ -48,7 +47,10 @@ function CartPage() {
   useEffect(() => {
     fetch("https://api.exchangerate-api.com/v4/latest/INR")
       .then(res => res.json())
-      .then(data => setExchangeRates(data.rates))
+      .then(data => {
+        setExchangeRates(data.rates);
+        setForceUpdate(prev => prev + 1); // Force update when rates load
+      })
       .catch(error => console.error("Error fetching exchange rates:", error));
 
     setCurrency(getCurrencyFromLanguage());
@@ -59,14 +61,13 @@ function CartPage() {
     return (price * rate).toFixed(2);
   };
 
-
-
-
   useEffect(() => {
     const checkLanguageChange = setInterval(() => {
       const currentLanguage = localStorage.getItem("selectedLanguage") || 'en';
       if (currentLanguage !== language) {
         setLanguage(currentLanguage);
+        setCurrency(getCurrencyFromLanguage());
+        setForceUpdate(prev => prev + 1); // Force update when language changes
       }
     }, 500);
 
@@ -75,7 +76,7 @@ function CartPage() {
 
   useEffect(() => {
     if (!userEmail) {
-      toast.error( "User not logged in!" );
+      toast.error(language === 'zh-TW' ? "用戶未登錄!" : "User not logged in!");
       navigate("/login");
       return;
     }
@@ -86,14 +87,14 @@ function CartPage() {
     if (userId) {
       fetchCart();
     }
-  }, [userId]);
+  }, [userId, forceUpdate]); // Add forceUpdate to dependencies
 
   const fetchUserId = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/users/getUserId/${userEmail}`);
       setUserId(response.data.userId);
     } catch (err) {
-      toast.error("Failed to fetch user ID." );
+      toast.error(language === 'zh-TW' ? "無法獲取用戶ID!" : "Failed to fetch user ID.");
       console.error("Error fetching user ID:", err);
     }
   };
@@ -106,7 +107,7 @@ function CartPage() {
       const validItems = (cartData.items || []).filter(item => item?.productId);
       setCart({ ...cartData, items: validItems });
     } catch (err) {
-      toast.error("Failed to load cart." );
+      toast.error(language === 'zh-TW' ? "無法加載購物車!" : "Failed to load cart.");
       console.error("Error fetching cart:", err);
     } finally {
       setLoading(false);
@@ -121,10 +122,11 @@ function CartPage() {
         ...prevCart,
         items: prevCart.items.filter(item => item?.productId?._id !== productId)
       }));
-      toast.success( "Item removed from cart!" );
+      toast.success(language === 'zh-TW' ? "商品已從購物車移除!" : "Item removed from cart!");
+      setForceUpdate(prev => prev + 1); // Force update after removal
       window.dispatchEvent(new Event('cartUpdated'));
     } catch (err) {
-      toast.error("Failed to remove item.");
+      toast.error(language === 'zh-TW' ? "移除商品失敗!" : "Failed to remove item.");
       console.error("Error removing item:", err);
     }
   };
@@ -149,26 +151,27 @@ function CartPage() {
             : item
         )
       }));
+      setForceUpdate(prev => prev + 1); // Force update after quantity change
       window.dispatchEvent(new Event('cartUpdated'));
     } catch (err) {
-      toast.error("Failed to update quantity." );
+      toast.error(language === 'zh-TW' ? "更新數量失敗!" : "Failed to update quantity.");
       console.error("Error updating quantity:", err);
     }
   };
 
   const getTotalPrice = () => {
-    if (!cart.items || cart.items.length === 0) return "0.00";
+    if (!cart.items || cart.items.length === 0) return 0;
     return cart.items.reduce((total, item) => {
       if (!item?.productId?.price) return total;
       const price = item.productId.price || 0;
       const discount = item.productId.discountPrice || 0;
       return total + ((price - discount) * (item.quantity || 1));
-    }, 0).toFixed(2);
+    }, 0);
   };
 
   const handleProceedToBuy = () => {
     if (cart.items.length === 0) {
-      toast.error("Your cart is empty!" );
+      toast.error(language === 'zh-TW' ? "您的購物車是空的!" : "Your cart is empty!");
       return;
     }
     setIsCheckoutOpen(true);
@@ -206,110 +209,110 @@ function CartPage() {
               fontSize: { xs: "1.5rem", sm: "2rem" },
             }}
           >
-            { "Your Cart" }
+            {language === 'zh-TW' ? '您的購物車' : 'Your Cart'}
           </Typography>
           
           {loading ? (
             <Typography variant="body1" sx={{ mt: 2, color: "text.secondary" }}>
-              { "Loading your cart..." }
+              {language === 'zh-TW' ? '正在加載您的購物車...' : 'Loading your cart...'}
             </Typography>
           ) : cart.items.length === 0 ? (
             <Box sx={{ textAlign: 'center', py: 4 }}>
               <ShoppingCart sx={{ fontSize: 48, color: 'text.disabled', mb: 2 }} />
               <Typography variant="body1" sx={{ mt: 2, color: "text.secondary" }}>
-                {"Your cart is empty" }
+                {language === 'zh-TW' ? '您的購物車是空的' : 'Your cart is empty'}
               </Typography>
               <Button 
                 variant="outlined" 
                 sx={{ mt: 3 }}
                 onClick={() => navigate('/')}
               >
-                { "Continue Shopping" }
+                {language === 'zh-TW' ? '繼續購物' : 'Continue Shopping'}
               </Button>
             </Box>
           ) : (
             <Box>
-            <List>
-              {cart.items.map(
-                (item) =>
-                  item?.productId && (
-                    <React.Fragment key={item.productId._id}>
-                      <ListItem
-                        sx={{
-                          flexDirection: { xs: "column", sm: "row" },
-                          alignItems: "center",
-                        }}
-                      >
-                        <ListItemAvatar>
-                          <Avatar
-                            alt={item.productId.model || "Product"}
-                            src={item.productId.image}
-                            variant="square"
-                            sx={{
-                              width: { xs: 60, sm: 80 },
-                              height: { xs: 60, sm: 80 },
-                              mb: { xs: 1, sm: 0 },
-                            }}
-                          />
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={item.productId.model || "Unknown Product"}
-                          secondary={
-                            <>
-                              <Typography component="span" variant="body2" color="text.primary">
-                                {currencySymbol} {convertPrice(item.productId.price - item.productId.discountPrice)}
-                              </Typography>
-                              {item.productId.discountPrice && (
-                                <Typography
-                                  component="span"
-                                  variant="body2"
-                                  color="text.secondary"
-                                  sx={{
-                                    textDecoration: "line-through",
-                                    ml: 1,
-                                    fontSize: "0.9rem",
-                                  }}
-                                >
-                                  {currencySymbol} {convertPrice(item.productId.price)}
+              <List>
+                {cart.items.map(
+                  (item) =>
+                    item?.productId && (
+                      <React.Fragment key={item.productId._id}>
+                        <ListItem
+                          sx={{
+                            flexDirection: { xs: "column", sm: "row" },
+                            alignItems: "center",
+                          }}
+                        >
+                          <ListItemAvatar>
+                            <Avatar
+                              alt={item.productId.model || "Product"}
+                              src={item.productId.image}
+                              variant="square"
+                              sx={{
+                                width: { xs: 60, sm: 80 },
+                                height: { xs: 60, sm: 80 },
+                                mb: { xs: 1, sm: 0 },
+                              }}
+                            />
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={item.productId.model || "Unknown Product"}
+                            secondary={
+                              <>
+                                <Typography component="span" variant="body2" color="text.primary">
+                                  {currencySymbol} {convertPrice(item.productId.price - item.productId.discountPrice)}
                                 </Typography>
-                              )}
-                              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                                <IconButton onClick={() => updateQuantity(item.productId._id, -1)} disabled={item.quantity <= 1}>
-                                  <Remove />
-                                </IconButton>
-                                <Typography sx={{ mx: 1 }}>{item.quantity || 1}</Typography>
-                                <IconButton onClick={() => updateQuantity(item.productId._id, 1)}>
-                                  <Add />
-                                </IconButton>
-                              </Box>
-                            </>
-                          }
-                        />
-                        <Button startIcon={<DeleteOutline />} onClick={() => removeFromCart(item.productId._id)} color="error">
-                          Remove
-                        </Button>
-                      </ListItem>
-                      <Divider variant="inset" component="li" />
-                    </React.Fragment>
-                  )
-              )}
-            </List>
-            <Box sx={{ mt: 5, textAlign: "right" }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Total: {currencySymbol} {convertPrice(getTotalPrice())}
-              </Typography>
-              <Button
-                variant="contained"
-                color="info"
-                startIcon={<ShoppingCart />}
-                onClick={handleProceedToBuy}
-                size="large"
-                fullWidth
-              >
-                Proceed to Buy
-              </Button>
+                                {item.productId.discountPrice && (
+                                  <Typography
+                                    component="span"
+                                    variant="body2"
+                                    color="text.secondary"
+                                    sx={{
+                                      textDecoration: "line-through",
+                                      ml: 1,
+                                      fontSize: "0.9rem",
+                                    }}
+                                  >
+                                    {currencySymbol} {convertPrice(item.productId.price)}
+                                  </Typography>
+                                )}
+                                <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                                  <IconButton onClick={() => updateQuantity(item.productId._id, -1)} disabled={item.quantity <= 1}>
+                                    <Remove />
+                                  </IconButton>
+                                  <Typography sx={{ mx: 1 }}>{item.quantity || 1}</Typography>
+                                  <IconButton onClick={() => updateQuantity(item.productId._id, 1)}>
+                                    <Add />
+                                  </IconButton>
+                                </Box>
+                              </>
+                            }
+                          />
+                          <Button startIcon={<DeleteOutline />} onClick={() => removeFromCart(item.productId._id)} color="error">
+                            {language === 'zh-TW' ? '移除' : 'Remove'}
+                          </Button>
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                      </React.Fragment>
+                    )
+                )}
+              </List>
+              <Box sx={{ mt: 5, textAlign: "right" }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                  {language === 'zh-TW' ? '總計' : 'Total'}: {currencySymbol} {convertPrice(getTotalPrice())}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="info"
+                  startIcon={<ShoppingCart />}
+                  onClick={handleProceedToBuy}
+                  size="large"
+                  fullWidth
+                >
+                  {language === 'zh-TW' ? '繼續結賬' : 'Proceed to Buy'}
+                </Button>
+              </Box>
             </Box>
-          </Box>
           )}
         </Paper>
         <Dialog
