@@ -1457,4 +1457,4 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
       </CardContent>
     </ThemeProvider>
   );
-}                            
+}
