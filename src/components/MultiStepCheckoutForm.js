@@ -1339,7 +1339,7 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
                                 </TableCell>
                                 <TableCell align="right">
                                   {currencySymbol}
-                                  {((item.productId.price - item.productId.discountPrice) * item.quantity).toFixed(2)}
+                                  {convertPrice(((item.productId.price - item.productId.discountPrice) * item.quantity).toFixed(2))}
                                 </TableCell>
                               </TableRow>
                             ))}
