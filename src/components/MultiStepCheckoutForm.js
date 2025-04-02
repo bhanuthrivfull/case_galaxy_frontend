@@ -25,7 +25,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { toast } from "react-toastify"
-import { useLanguage } from "../contexts/LanguageContext"
 
 const API_BASE_URL = "http://localhost:5000/api"
 
@@ -1458,4 +1457,4 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
       </CardContent>
     </ThemeProvider>
   );
-}
+}                            
