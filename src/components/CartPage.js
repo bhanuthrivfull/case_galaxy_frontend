@@ -20,7 +20,7 @@ import Header from "./Header.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://case-galaxy-backend-2ow1.onrender.com/api";
 
 function CartPage() {
   const [cart, setCart] = useState({ items: [] });
