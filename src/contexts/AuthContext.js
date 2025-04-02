@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = "https://case-galaxy-backend-2ow1.onrender.com/api";
+const API_URL = "http://localhost:5000/api";
 
 const AuthContext = createContext(null);
 
@@ -86,7 +86,9 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      localStorage.removeItem('token');
+      // localStorage.removeItem('token');
+      localStorage.clear();
+      sessionStorage.clear();
       delete axios.defaults.headers.common['Authorization'];
       setUser(null);
       if (inactivityTimeoutRef.current)
