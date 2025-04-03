@@ -17,10 +17,9 @@ import {
 const OrderHistory = ({ orders }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const selectedLanguage = localStorage.getItem("selectedLanguage");
-  const currencySymbol = selectedLanguage === 'en' ? '₹' : '¥';
-
-
+  const selectedLanguage = localStorage.getItem("selectedLanguage") || "en";  
+  const currencySymbol = selectedLanguage === "en" ? "₹" : "¥";  
+  
 
   // Price Converter
   const [exchangeRates, setExchangeRates] = useState({});

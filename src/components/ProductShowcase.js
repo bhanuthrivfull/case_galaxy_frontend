@@ -29,8 +29,9 @@ function ProductShowcase({ category }) {
   const [error, setError] = useState(null);
   const [loadingProducts, setLoadingProducts] = useState({}); // Track loading state per product 
 
-  const selectedLanguage = localStorage.getItem("selectedLanguage");
-  const currencySymbol = selectedLanguage === 'en' ? '₹' : '¥';
+  const selectedLanguage = localStorage.getItem("selectedLanguage") || "en";  
+  const currencySymbol = selectedLanguage === "en" ? "₹" : "¥";  
+  
 
   const [exchangeRates, setExchangeRates] = useState({});
   const [currency, setCurrency] = useState("INR");

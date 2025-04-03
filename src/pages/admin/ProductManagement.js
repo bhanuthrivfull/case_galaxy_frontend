@@ -34,10 +34,9 @@ const ProductManagement = () => {
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
-
-  const selectedLanguage = localStorage.getItem("selectedLanguage");
-  const currencySymbol = selectedLanguage === 'en' ? '₹' : '¥';
-
+  const selectedLanguage = localStorage.getItem("selectedLanguage") || "en";  
+  const currencySymbol = selectedLanguage === "en" ? "₹" : "¥";  
+  
 
 
 

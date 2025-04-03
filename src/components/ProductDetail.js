@@ -42,8 +42,9 @@ function ProductDetail() {
   const [processingBuyNow, setProcessingBuyNow] = useState(false);
   const [openImageDialog, setOpenImageDialog] = useState(false);
 
-  const selectedLanguage = localStorage.getItem("selectedLanguage");
-  const currencySymbol = selectedLanguage === 'en' ? '₹' : '¥';
+  const selectedLanguage = localStorage.getItem("selectedLanguage") || "en";  
+  const currencySymbol = selectedLanguage === "en" ? "₹" : "¥";  
+  
 
   // Price Converter
   const [exchangeRates, setExchangeRates] = useState({});

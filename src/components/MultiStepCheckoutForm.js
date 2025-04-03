@@ -165,8 +165,9 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const navigate = useNavigate()
 
-  const selectedLanguage = localStorage.getItem("selectedLanguage");
-  const currencySymbol = selectedLanguage === 'en' ? '₹' : '¥';
+  const selectedLanguage = localStorage.getItem("selectedLanguage") || "en";  
+  const currencySymbol = selectedLanguage === "en" ? "₹" : "¥";  
+  
 
   // Validation functions
   const validateName = (value) => {
@@ -220,11 +221,13 @@ export default function MultiStepCheckoutForm({ totalPrice, onClose }) {
   }
 
   const validateAddress = (value) => {
-    if (!value) return "Address is required."
-    if (value.length < 10) return "Address must be at least 10 characters long."
-    if (/[!@#$%^&*(),?":{}|<>]/.test(value)) return "Address contains invalid special characters."
-    return ""
-  }
+    if (!value) return "Address is required.";
+    if (value.length < 10) return "Address must be at least 10 characters long.";
+    const invalidChars = /[^a-zA-Z0-9\s\-\.,#/'&\\]/;
+    if (invalidChars.test(value)) return "Address contains invalid special characters.";
+    return "";
+  };
+
 
   const validateCity = (value) => {
     if (!value) return "City is required."
