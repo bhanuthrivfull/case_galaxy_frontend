@@ -20,15 +20,16 @@ import Header from "./Header.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+
 const API_BASE_URL = "https://case-galaxy-backend-2ow1.onrender.com/api";
 
-const MAX_CART_ITEMS = 10;
+
 
 function CartPage() {
   const [cart, setCart] = useState({ items: [] });
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [forceUpdate, setForceUpdate] = useState(0);
+  const [forceUpdate, setForceUpdate] = useState(0); // Add forceUpdate state
   const navigate = useNavigate();
 
   const userEmail = localStorage.getItem("userEmail");
@@ -51,7 +52,7 @@ function CartPage() {
       .then(res => res.json())
       .then(data => {
         setExchangeRates(data.rates);
-        setForceUpdate(prev => prev + 1);
+        setForceUpdate(prev => prev + 1); // Force update when rates load
       })
       .catch(error => console.error("Error fetching exchange rates:", error));
 
@@ -69,7 +70,7 @@ function CartPage() {
       if (currentLanguage !== language) {
         setLanguage(currentLanguage);
         setCurrency(getCurrencyFromLanguage());
-        setForceUpdate(prev => prev + 1);
+        setForceUpdate(prev => prev + 1); // Force update when language changes
       }
     }, 500);
 
@@ -89,7 +90,7 @@ function CartPage() {
     if (userId) {
       fetchCart();
     }
-  }, [userId, forceUpdate]);
+  }, [userId, forceUpdate]); // Add forceUpdate to dependencies
 
   const fetchUserId = async () => {
     try {
@@ -106,21 +107,8 @@ function CartPage() {
       setLoading(true);
       const response = await axios.get(`${API_BASE_URL}/cart/${userId}`);
       const cartData = response.data || { items: [] };
-      
-      // Filter out invalid items
       const validItems = (cartData.items || []).filter(item => item?.productId);
-      
       setCart({ ...cartData, items: validItems });
-      
-      // Show warning if cart is full
-      if (validItems.length >= MAX_CART_ITEMS) {
-        toast.warning(
-          language === 'zh-TW' 
-            ? `購物車已滿 (最多${MAX_CART_ITEMS}個商品)! 要添加新商品，請先移除現有商品。` 
-            : `Your cart is full (max ${MAX_CART_ITEMS} items)! Remove items to add new ones.`,
-          { autoClose: 5000, position: "top-center" }
-        );
-      }
     } catch (err) {
       toast.error(language === 'zh-TW' ? "無法加載購物車!" : "Failed to load cart.");
       console.error("Error fetching cart:", err);
@@ -138,7 +126,7 @@ function CartPage() {
         items: prevCart.items.filter(item => item?.productId?._id !== productId)
       }));
       toast.success(language === 'zh-TW' ? "商品已從購物車移除!" : "Item removed from cart!");
-      setForceUpdate(prev => prev + 1);
+      setForceUpdate(prev => prev + 1); // Force update after removal
       window.dispatchEvent(new Event('cartUpdated'));
     } catch (err) {
       toast.error(language === 'zh-TW' ? "移除商品失敗!" : "Failed to remove item.");
@@ -151,27 +139,7 @@ function CartPage() {
     const item = cart.items.find(item => item?.productId?._id === productId);
     if (!item) return;
 
-    const newQuantity = item.quantity + change;
-
-    // Check if increasing quantity would exceed the limit
-    if (change > 0) {
-      const totalItems = cart.items.reduce((total, cartItem) => {
-        return total + (cartItem.productId._id === productId ? newQuantity : cartItem.quantity);
-      }, 0);
-      
-      if (totalItems > MAX_CART_ITEMS) {
-        toast.warning(
-          language === 'zh-TW' 
-            ? `無法添加更多商品 (最多${MAX_CART_ITEMS}個商品)!` 
-            : `Cannot add more items (max ${MAX_CART_ITEMS} items)!`,
-          { autoClose: 3000, position: "top-center" }
-        );
-        return;
-      }
-    }
-
-    // Don't allow quantity below 1
-    if (newQuantity < 1) return;
+    const newQuantity = Math.max(1, item.quantity + change);
 
     try {
       await axios.patch(`${API_BASE_URL}/cart/${userId}/item/${productId}`, {
@@ -186,7 +154,7 @@ function CartPage() {
             : item
         )
       }));
-      setForceUpdate(prev => prev + 1);
+      setForceUpdate(prev => prev + 1); // Force update after quantity change
       window.dispatchEvent(new Event('cartUpdated'));
     } catch (err) {
       toast.error(language === 'zh-TW' ? "更新數量失敗!" : "Failed to update quantity.");
@@ -211,16 +179,6 @@ function CartPage() {
     }
     setIsCheckoutOpen(true);
   };
-
-  // Listen for cart update events from other components
-  useEffect(() => {
-    const handleCartUpdate = () => {
-      fetchCart();
-    };
-
-    window.addEventListener('cartUpdated', handleCartUpdate);
-    return () => window.removeEventListener('cartUpdated', handleCartUpdate);
-  }, []);
 
   return (
     <>
@@ -255,11 +213,6 @@ function CartPage() {
             }}
           >
             {language === 'zh-TW' ? '您的購物車' : 'Your Cart'}
-            {cart.items.length >= MAX_CART_ITEMS && (
-              <Typography variant="caption" color="error" sx={{ ml: 1 }}>
-                ({language === 'zh-TW' ? '已滿' : 'Full'})
-              </Typography>
-            )}
           </Typography>
           
           {loading ? (
@@ -282,26 +235,6 @@ function CartPage() {
             </Box>
           ) : (
             <Box>
-              {cart.items.length >= MAX_CART_ITEMS && (
-                <Box sx={{ 
-                  backgroundColor: '#ffebee', 
-                  p: 2, 
-                  mb: 2, 
-                  borderRadius: 1,
-                  borderLeft: '4px solid #f44336'
-                }}>
-                  <Typography variant="body2" color="error">
-                    {language === 'zh-TW' 
-                      ? `警告: 您的購物車已達到${MAX_CART_ITEMS}個商品的上限!` 
-                      : `Warning: Your cart has reached the limit of ${MAX_CART_ITEMS} items!`}
-                  </Typography>
-                  <Typography variant="body2" sx={{ mt: 1 }}>
-                    {language === 'zh-TW' 
-                      ? '要添加新商品，請先移除一些現有商品。' 
-                      : 'Please remove some items before adding new ones.'}
-                  </Typography>
-                </Box>
-              )}
               <List>
                 {cart.items.map(
                   (item) =>
@@ -347,28 +280,18 @@ function CartPage() {
                                   </Typography>
                                 )}
                                 <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                                  <IconButton 
-                                    onClick={() => updateQuantity(item.productId._id, -1)} 
-                                    disabled={item.quantity <= 1}
-                                  >
+                                  <IconButton onClick={() => updateQuantity(item.productId._id, -1)} disabled={item.quantity <= 1}>
                                     <Remove />
                                   </IconButton>
                                   <Typography sx={{ mx: 1 }}>{item.quantity || 1}</Typography>
-                                  <IconButton 
-                                    onClick={() => updateQuantity(item.productId._id, 1)}
-                                    disabled={cart.items.reduce((sum, i) => sum + i.quantity, 0) >= MAX_CART_ITEMS}
-                                  >
+                                  <IconButton onClick={() => updateQuantity(item.productId._id, 1)}>
                                     <Add />
                                   </IconButton>
                                 </Box>
                               </>
                             }
                           />
-                          <Button 
-                            startIcon={<DeleteOutline />} 
-                            onClick={() => removeFromCart(item.productId._id)} 
-                            color="error"
-                          >
+                          <Button startIcon={<DeleteOutline />} onClick={() => removeFromCart(item.productId._id)} color="error">
                             {language === 'zh-TW' ? '移除' : 'Remove'}
                           </Button>
                         </ListItem>
@@ -388,7 +311,6 @@ function CartPage() {
                   onClick={handleProceedToBuy}
                   size="large"
                   fullWidth
-                  disabled={cart.items.length === 0}
                 >
                   {language === 'zh-TW' ? '繼續結賬' : 'Proceed to Buy'}
                 </Button>
@@ -413,3 +335,7 @@ function CartPage() {
 }
 
 export default CartPage;
+
+
+
+
